@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@jgl-mui': path.resolve(__dirname, './workspaces/jgl-mui/src')
+      '@jgl-mui': path.resolve(__dirname, './workspaces/jgl-mui/src'),
+      '@jgl-ui-lib': path.resolve(__dirname, './workspaces/jgl-ui-lib/src')
     }
   }
 })
