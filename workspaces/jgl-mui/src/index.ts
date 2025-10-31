@@ -7,4 +7,4 @@
 
 // TODO: Add your actual component exports here
 
-export * from './table/jgl-table-header';
+export * from './table/index';
