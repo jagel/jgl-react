@@ -1,0 +1,49 @@
+{
+  "name": "jgl-mui",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "React MUI component library",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc && npm run build:cjs",
+    "build:cjs": "esbuild src/index.ts --bundle --outfile=dist/index.cjs --format=cjs --external:react --external:@mui/material --external:@emotion/react --external:@emotion/styled",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "react",
+    "mui",
+    "components",
+    "table"
+  ],
+  "author": "Jagel",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "your-repo-url-here"
+  },
+  "peerDependencies": {
+    "react": "^19.1.1",
+    "@mui/material": "^7.3.4",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "esbuild": "^0.19.0",
+    "@types/react": "^18.0.0"
+  }
+}
