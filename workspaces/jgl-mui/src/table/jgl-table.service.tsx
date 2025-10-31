@@ -8,7 +8,7 @@ import { JglHeaderProps } from "./jgl-table-header";
  * Utility class for creating table header definitions with default settings.
  */
 const JglTableCreator = {
-    setHeadersDefaults : <T extends Object>(
+    setHeadersDefaults : (
         headers: Array<JGLHeaderTable>,
         sort: TableSort
     ) : JglHeaderProps => ({

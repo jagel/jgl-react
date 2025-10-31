@@ -3,13 +3,10 @@
 // JGL Library
 import { JglTableCreator } from "@jgl-mui/table";
 
-// Internal references
-import type { ITableModel } from "./jgl-table.model";
-
 // #endregion Imports
 
 export const TblMtd = {
-    headers: JglTableCreator.setHeadersDefaults<ITableModel>([
+    headers: JglTableCreator.setHeadersDefaults([
 		{key: 'action', title: "Action",  disableSort: true, align: 'left'},
 		{key: 'id', title: "Id", align: 'left'},
 		{key: 'name', title: "Name", align: 'left'},
