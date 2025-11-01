@@ -1,0 +1,29 @@
+.app-navigation {
+    width: 240px;
+}
+
+.app-navigation .MuiDrawer-paper {
+    width: 240px;
+    box-sizing: border-box;
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    justify-content: flex-end;
+    min-height: 64px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.navigation-item {
+    padding: 12px 16px;
+}
+
+.navigation-item:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.navigation-item .MuiListItemIcon-root {
+    min-width: 40px;
+}
