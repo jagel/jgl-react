@@ -1,14 +1,25 @@
-import './App.css'
-import JglTableExample from './table/jgl-table-example'
+// #region Imports
 
+// Internal modules and components
+import { useAppRoutes } from './app-setup/app-routing';
+import { RouterProvider } from 'react-router-dom';
+
+// Sthyles
+import './App.css'
+// #endregion Imports
 
 function App() {
+	//#region Initializations
+    const router = useAppRoutes();
+    //#endregion Initializations
 
-  return (
-    <>
-      <JglTableExample />
-    </>
-  )
+    // #region Render
+    return (
+        <>
+		    <RouterProvider router={router} />
+        </>
+    )
+    // #endregion Render
 }
 
 export default App
