@@ -18,7 +18,7 @@ const AppLayout: React.FC = () => {
 
     return <> 
      <AppNavigation open={drawerOpen} onClose={()=>setDrawerOpen(false)} />
-    <div style={{display:'flex', justifyContent:'space-even;y', flexDirection:'column', height:'100vh', gap:'10px'}}>
+    <div style={{display:'flex', justifyContent:'space-evenly', flexDirection:'column', height:'100vh', gap:'10px'}}>
         <nav style={{paddingLeft:drawerOpen? '250px':'10px', transition:'padding-left 0.2s'}}>
             <Button variant="outlined" onClick={() => setDrawerOpen(prev => !prev)}>
                 <Icon path={drawerOpen ? mdiMenuOpen : mdiMenuClose} size={1} />
