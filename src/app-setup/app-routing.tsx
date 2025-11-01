@@ -1,33 +1,16 @@
 // #region Imports
 // React and external libraries
-import { createBrowserRouter, RouteObject } from "react-router-dom";
-import { lazy } from "react";
-
-// Pages
-const AppHome = lazy(() => import("../app-module/app-home"));
-const AppLayout = lazy(() => import("../app-module/app-layout"));
-const JglTableExample = lazy(() => import("../table/jgl-table-example"));
-const AppErrorPage = lazy(() => import("../app-module/app-error-page"));
+import React from "react";
 // #endregion Imports
 
 
-export const useAppRoutes = () => {
-    const appRouterObject: RouteObject[] = [
-    {
-        path: "/",
-        element: <AppLayout />,
+interface AppRoutes {
+    name: React.ReactNode;
+    path: string;
+}
 
-        children: [{
-            index: true,
-            element: <AppHome />
-        },{
-            path: "table-example",
-            element: <JglTableExample />
-        },{
-            path: "*",
-            element: <AppErrorPage title="404: Page Not Found" message="Sorry, the page you are looking for does not exist." />
-        }]
-    }];
-
-	return createBrowserRouter(appRouterObject);
-} 
+/**  Routes definitions for breadcrumbs creation */
+export const authRoutes = {
+    root: { name:'Home', path:'/' } as AppRoutes,
+    tablePage: { name:'Table', path:'/table-example' } as AppRoutes,
+}
