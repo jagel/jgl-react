@@ -4,7 +4,7 @@
 import { useAppRoutes } from './app-setup/app-routing';
 import { RouterProvider } from 'react-router-dom';
 
-// Sthyles
+// Styles
 import './App.css'
 // #endregion Imports
 
