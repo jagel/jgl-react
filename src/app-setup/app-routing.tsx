@@ -10,9 +10,7 @@ const JglTableExample = lazy(() => import("../table/jgl-table-example"));
 const AppErrorPage = lazy(() => import("../app-module/app-error-page"));
 // #endregion Imports
 
-
-export const useAppRoutes = () => {
-    const appRouterObject: RouteObject[] = [
+const appRouterObject: RouteObject[] = [
     {
         path: "/",
         element: <AppLayout />,
@@ -27,7 +25,11 @@ export const useAppRoutes = () => {
             path: "*",
             element: <AppErrorPage title="404: Page Not Found" message="Sorry, the page you are looking for does not exist." />
         }]
-    }];
+    }
+];
 
-	return createBrowserRouter(appRouterObject);
+const appRouter = createBrowserRouter(appRouterObject);
+
+export const useAppRoutes = () => {
+	return appRouter;
 } 
