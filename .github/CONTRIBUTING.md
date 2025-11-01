@@ -15,7 +15,7 @@ Thank you for your interest in contributing to this project! We welcome contribu
 
 ## Development Setup
 
-1. Install Node.js (version 18 or higher)
+1. Install Node.js (version 20 or higher)
 2. Install dependencies: `npm install`
 3. Start the development server: `npm run dev`
 4. Run tests: `npm test`
