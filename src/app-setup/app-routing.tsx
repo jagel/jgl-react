@@ -1,13 +1,13 @@
 // #region Imports
 // React and external libraries
 import { createBrowserRouter, RouteObject } from "react-router-dom";
+import { lazy } from "react";
 
 // Pages
-import AppHome from "../app-module/app-home";
-import AppLayout from "../app-module/app-layout";
-import JglTableExample from "../table/jgl-table-example";
-import AppErrorPage from "../app-module/app-error-page";
-
+const AppHome = lazy(() => import("../app-module/app-home"));
+const AppLayout = lazy(() => import("../app-module/app-layout"));
+const JglTableExample = lazy(() => import("../table/jgl-table-example"));
+const AppErrorPage = lazy(() => import("../app-module/app-error-page"));
 // #endregion Imports
 
 export const appRouterObject: RouteObject[] = [
