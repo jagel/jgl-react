@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 import AppNavigation from "./app-navigation";
 import Button  from "@mui/material/Button";
 import Icon from "@mdi/react";
-import { mdiLock, mdiMenuClose, mdiMenuOpen } from "@mdi/js";
+import { mdiMenuClose, mdiMenuOpen } from "@mdi/js";
 // #endregion Imports
 
 
