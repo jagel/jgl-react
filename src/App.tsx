@@ -24,7 +24,7 @@ function App() {
         // Unauthenticated routes
         [{
             path: "*",
-            element: <AppErrorPage title="404: PAge Not Found" message="Unauthenticated pages are not implemented" />
+            element: <AppErrorPage title="404: Page Not Found" message="Unauthenticated pages are not implemented" />
         }] :
         // Authenticated routes
         [{
