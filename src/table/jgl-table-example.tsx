@@ -111,7 +111,7 @@ const JglTableExample: React.FC = () => {
 						{ filteredData.length === 0 && 
 							<TableRow>
 								<TableCell colSpan={tblDefaults.totalColumns} align="center" sx={{color:'gray'}} >
-									No Conent
+									No Content
 								</TableCell>
 							</TableRow>}
 					</TableBody>
