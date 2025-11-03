@@ -77,10 +77,6 @@ export const theme = createTheme({
           light: '#ffb74d',
           dark: '#f57c00',
         },
-        background: {
-          default: '#121212',
-          paper: '#1e1e1e',
-        },
         text: {
           primary: '#ffffff',
           secondary: 'rgba(255, 255, 255, 0.7)',
