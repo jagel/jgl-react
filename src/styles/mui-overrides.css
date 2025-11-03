@@ -1,0 +1,17 @@
+
+
+/* create variables where I can store default colors */
+:root {
+  --mui-secondary-main: #fff;
+  --mui-success-main: #4caf50;
+}
+
+/* Override MUI Button styles */
+.MuiButton-containedSecondary {
+  background-color: var(--mui-secondary-main) !important;
+}
+
+/* Override MUI success color */
+.MuiAlert-standardSuccess {
+  background-color: var(--mui-success-main) !important;
+}
