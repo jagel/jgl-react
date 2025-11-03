@@ -2,7 +2,7 @@
 // React and external libraries
 import { Button } from "@mui/material";
 import { useColorScheme } from "@mui/material/styles";
-import React, { useState } from "react";
+import React from "react";
 // #endregion Imports
 
 const AppHome: React.FC = () => {
