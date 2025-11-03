@@ -11,6 +11,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
+import Box from "@mui/material/Box";
 
 // JGL Library
 import { JglTableHeader } from "@jgl-mui/table/jgl-table-header";
@@ -25,10 +26,11 @@ import type { ITableModel } from "./jgl-table.model";
 import { dataCreator } from "./jgl-table.service";
 import { TblMtd } from "./jgl-table.definitions";
 import { JGLTablePagination } from "@jgl-mui/table/jgl-table.pagination";
+import Typography from "@mui/material/Typography";
 
 // #endregion Imports
 
-const JglTableExample = () => {
+const JglTableExample: React.FC = () => {
 
 	//#region definitions
 	const tblDefaults = TblMtd.headers;
@@ -75,49 +77,58 @@ const JglTableExample = () => {
     //#region Render
 	const tablePage = tblSvc.paginate(filteredData, tblProps.pagination.page, tblProps.pagination.recordsPerPage);
 
-    return <Paper elevation={1}>
-		<Toolbar sx={JGL_STYLE_Table_Toolbar}>
-			<SearchInput ref={searchRef} onSearchChange={(searchStr) => onSearch(searchStr)} textPlaceHolder="search" />
-			<button onClick={() => handleResetTable()}>Reset</button>
-		</Toolbar>
-		<TableContainer>
-			<Table aria-labelledby="application-list" size={'medium'}>
-				<TableHead>					
-					<JglTableHeader {...tblDefaults}
-						onSortChange={(key, direction) => onSortChange({orderBy:key, direction})}						
-						ref={sortRef}
-					/> 
-				</TableHead>
-				<TableBody>
-					{tablePage.map((row, index) =>
-						<TableRow key={index} hover>
-							<TableCell align="left">...</TableCell>
-							<TableCell align="left">{row.id}</TableCell>
-							<TableCell align="left">{row.name}</TableCell>
-							<TableCell align="left">{row.age}</TableCell>
-							<TableCell align="right">{row.email}</TableCell>
-							<TableCell align="left">{row.address}</TableCell>
-							<TableCell align="right">{row.phone}</TableCell>
-						</TableRow>
-					)}
-					{ filteredData.length === 0 && 
-						<TableRow>
-							<TableCell colSpan={tblDefaults.totalColumns} align="center" sx={{color:'gray'}} >
-								No Conent
-							</TableCell>
-						</TableRow>}
-				</TableBody>
-			</Table>
-		</TableContainer>
+    return (
+		<Box>
+			<Typography variant="h6" gutterBottom>
+            	Table Example
+          	</Typography>
+		  
+			<Paper elevation={1}>
+			<Toolbar sx={JGL_STYLE_Table_Toolbar}>
+				<SearchInput ref={searchRef} onSearchChange={(searchStr) => onSearch(searchStr)} textPlaceHolder="search" />
+				<button onClick={() => handleResetTable()}>Reset</button>
+			</Toolbar>
+			<TableContainer>
+				<Table aria-labelledby="application-list" size={'medium'}>
+					<TableHead>					
+						<JglTableHeader {...tblDefaults}
+							onSortChange={(key, direction) => onSortChange({orderBy:key, direction})}						
+							ref={sortRef}
+						/> 
+					</TableHead>
+					<TableBody>
+						{tablePage.map((row, index) =>
+							<TableRow key={index} hover>
+								<TableCell align="left">...</TableCell>
+								<TableCell align="left">{row.id}</TableCell>
+								<TableCell align="left">{row.name}</TableCell>
+								<TableCell align="left">{row.age}</TableCell>
+								<TableCell align="right">{row.email}</TableCell>
+								<TableCell align="left">{row.address}</TableCell>
+								<TableCell align="right">{row.phone}</TableCell>
+							</TableRow>
+						)}
+						{ filteredData.length === 0 && 
+							<TableRow>
+								<TableCell colSpan={tblDefaults.totalColumns} align="center" sx={{color:'gray'}} >
+									No Content
+								</TableCell>
+							</TableRow>}
+					</TableBody>
+				</Table>
+			</TableContainer>
 
-		<JGLTablePagination 
-			totalRows={filteredData.length}
-			rowsPerPageOptions={[10,50,100]}
-			page={tblProps.pagination.page}
-			selectedRowPerPage={tblProps.pagination.recordsPerPage}
-			onPageChange={(page, rowsPerPage) => onPageChange(page, rowsPerPage)}
-		/>
-	</Paper>;
+			<JGLTablePagination 
+				totalRows={filteredData.length}
+				rowsPerPageOptions={[10,50,100]}
+				page={tblProps.pagination.page}
+				selectedRowPerPage={tblProps.pagination.recordsPerPage}
+				onPageChange={(page, rowsPerPage) => onPageChange(page, rowsPerPage)}
+			/>
+		</Paper>
+
+	</Box>
+	);
     //#endregion Render
 }
 

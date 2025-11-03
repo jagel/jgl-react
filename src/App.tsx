@@ -1,6 +1,11 @@
 // #region Imports
 import { lazy, useMemo } from 'react';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from './styles/theme';
+
+// MUI
+import Paper from '@mui/material/Paper';
 
 // Internal modules and components
 import { authRoutes } from './app-setup/app-routing';
@@ -10,6 +15,7 @@ const AppHome = lazy(() => import("./app-module/app-home"));
 const AppLayout = lazy(() => import("./app-module/app-layout"));
 const JglTableExample = lazy(() => import("./table/jgl-table-example"));
 const AppErrorPage = lazy(() => import("./app-module/app-error-page"));
+const ButtonsShowcasePage = lazy(() => import("./buttons/buttons-showcase"));
 
 // Styles
 import './App.css'
@@ -18,13 +24,13 @@ import './App.css'
 function App() {
 	//#region Initializations
     const isAuthenticated = true; // Placeholder for actual authentication logic
-    const routesDef = authRoutes;
+
     const routes = useMemo( () : RouteObject[] =>( 
         !isAuthenticated ? 
         // Unauthenticated routes
         [{
             path: "*",
-            element: <AppErrorPage title="404: Page Not Found" message="Unauthenticated pages are not implemented" />
+            element: <AppErrorPage title="404: Page Not Found" message="Unauthenticated pages are not implemented" />,
         }] :
         // Authenticated routes
         [{
@@ -35,8 +41,11 @@ function App() {
                 index: true,
                 element: <AppHome />
             },{
-                path: routesDef.tablePage.path,
+                path: authRoutes.tablePage.path,
                 element: <JglTableExample />
+            },{
+                path: authRoutes.buttonsShowcase.path,
+                element: < ButtonsShowcasePage />
             },{
                 path: "*",
                 element: <AppErrorPage title="404: Page Not Found" message="Sorry, the page you are looking for does not exist." />
@@ -51,9 +60,11 @@ function App() {
 
     // #region Render
     return (
-        <>
-		    <RouterProvider router={router} />
-        </>
+        <ThemeProvider theme={theme}>
+            <Paper style={{ minHeight: '100vh'}}>
+                <RouterProvider router={router} />
+            </Paper>
+        </ThemeProvider>
     )
     // #endregion Render
 }
