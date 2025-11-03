@@ -38,7 +38,7 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({ open, onClose }) =
     const navigate = useNavigate();
     const location = useLocation();
 
-    const menuItems = useMemo(() : AppRoutes[] => (Object.values(authRoutes) ), []);
+    const menuItems = useMemo((): AppRoutes[] => (Object.values(authRoutes) ), []);
     const [lockDrawer, setLockDrawer] = useState(false);
 
     // #endregion Initializations
