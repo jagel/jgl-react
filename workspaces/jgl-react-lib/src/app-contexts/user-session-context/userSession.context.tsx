@@ -25,8 +25,8 @@ export const UserSessionContext: React.FC<UserSessionContextProps> = ({
     const [userSession, setUserSession] = useState<UserSessionModel>(new UserSessionModel());
 
     useEffect(() => {
-        const serssionservice = contextTiers.contextsStatus.find(fi => fi.service === EContextService.sessionService);
-        if (serssionservice?.status === EContextTierStatus.init) {
+        const sessionService = contextTiers.contextsStatus.find(fi => fi.service === EContextService.sessionService);
+        if (sessionService?.status === EContextTierStatus.init) {
             onTierChange({ service: EContextService.sessionService, status: EContextTierStatus.loading });
             getUser().subscribe({
                 next: (response: AppData) => {
