@@ -2,7 +2,7 @@
 
 // React
 import React from 'react';
-import { Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 // MUI
 import Paper from '@mui/material/Paper';
@@ -13,6 +13,7 @@ import { AppInfo, AppVersioningContext } from '@jgl-react-lib/app-contexts/versi
 import { Appi18nContext, I18nCatalog } from '@jgl-react-lib/app-contexts/i18n-context';
 
 import { UserSessionContext, UserSessionModel } from '@jgl-react-lib/app-contexts';
+import { useColorScheme } from '@mui/material';
 
 // #endregion Imports
 
@@ -41,6 +42,7 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
         EContextService.i18nService,
         EContextService.sessionService
     ]);
+    const {setMode} = useColorScheme();
     //#endregion Initializations
 
     // #region Methods
@@ -59,7 +61,7 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
                     });
                 // subscriber.error('Mock initialization failed');
                 subscriber.complete();
-            }, 1000)
+            }, 300)
         });
 
      const mockInitI18nCatalogContext = () : Observable<Array<I18nCatalog>> => 
@@ -70,7 +72,7 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
                     {language: 'en', key: 'create', value: 'Create'}, {language: 'es', key: 'create', value: 'Crear'}
                 ]);
                 subscriber.complete();
-            }, 3000)
+            }, 300)
         });
 
      const mockGetUser = () : Observable<UserSessionModel> => 
@@ -93,7 +95,7 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
                         roleAccess: ['read', 'write'],
                     },
                     userPreferences:{
-                        theme: 'light',
+                        theme: 'dark',
                         timeZone: 'GMT-MOCK',
                         language: 'en',
                         apiCode: 'v1',
@@ -102,8 +104,13 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
                     isLoggedIn: true
                 });
                 subscriber.complete();
-            }, 2000)
-        });
+            }, 300)
+        }).pipe(tap(data => {
+            if(data.isLoggedIn){
+                const mode = data.userPreferences?.theme ?? 'light'; 
+                setMode(mode === 'light' ? 'light' : 'dark');
+            }
+        }));
     // #endregion Methods
     
     // #region Render
