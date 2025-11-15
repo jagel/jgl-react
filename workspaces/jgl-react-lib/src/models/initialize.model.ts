@@ -12,7 +12,6 @@ export interface UserProfile{
     name:string;
     email:string;
     accessClaims:Array<string>;
-    picture:string;
 }
 
 export interface AppData  {
