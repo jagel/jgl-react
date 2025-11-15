@@ -28,7 +28,7 @@ export const useInitTier = (serviceTier: Array<EContextService> = []) : [Context
         
         const setTier = (tier: ContextTier, tierIndex:number) => {
             // Update the tier that changed
-            if(tier.service == tierChanged.service){
+            if(tier.service === tierChanged.service){
                 return tierChanged;
             }
             // If the previous tier is completed, set the next tier to init
