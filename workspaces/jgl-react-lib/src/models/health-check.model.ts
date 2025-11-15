@@ -11,11 +11,11 @@ export interface HealthCheckItem{
     duration:Date;
     status:string;
     errorMessage:string;
-    data: HelathCheckData;
+    data: HealthCheckData;
     tags: Array<string>
 }
 
-export interface HelathCheckData {
+export interface HealthCheckData {
     description:string;
     details:string;
 }

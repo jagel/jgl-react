@@ -17,7 +17,7 @@ export interface TableCustomSort<T> extends TableSort<T> {
 export interface Pagination {
 	page:number;
 	recordsPerPage:number;
-	intialRecordsPerPage:number;
+	initialRecordsPerPage:number;
 }
 
 export interface TableProperties<T> {
