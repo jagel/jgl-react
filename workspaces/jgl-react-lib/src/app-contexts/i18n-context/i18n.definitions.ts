@@ -19,5 +19,5 @@ export class I18nContextDefaults implements iI18nContext {
     i18nCatalog: Array<I18nCatalog> = [];
     initCatalog = () => of<Array<I18nCatalog>>([]);
     setLanguage = (langugae: LanguageType) => this.language = langugae;
-    geti18nText = (textKey: string) => this.i18nCatalog.find((x) => x.language == this.language && x.key == textKey)?.value ?? textKey;
+    geti18nText = (textKey: string) => this.i18nCatalog.find((x) => x.language === this.language && x.key === textKey)?.value ?? textKey;
 }
