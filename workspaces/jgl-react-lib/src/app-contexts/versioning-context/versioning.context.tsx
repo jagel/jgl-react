@@ -27,8 +27,8 @@ export const AppVersioningContext: React.FC<AppVersioningContextProps> = ({
     const [versioningData, setVersioningData] = useState<iAppVersioningContextData>({} as iAppVersioningContextData);
 
     useEffect(() => {
-        const verisoningService = contextTiers.contextsStatus.find(fi => fi.service === EContextService.appVersioningService);
-        if (verisoningService?.status === EContextTierStatus.init) {
+        const versioningService = contextTiers.contextsStatus.find(fi => fi.service === EContextService.appVersioningService);
+        if (versioningService?.status === EContextTierStatus.init) {
             //onTierChange({ service: EContextService.appVersioningService, status: EContextTierStatus.loading });
 
             const appData = tryGetLocalStorage<AppInfo>(JglConstants.localStorage.appVersion);
