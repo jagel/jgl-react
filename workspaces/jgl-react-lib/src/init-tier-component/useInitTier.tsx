@@ -42,7 +42,7 @@ export const useInitTier = (serviceTier: Array<EContextService> = []) : [Context
             if(tierChanged.status === EContextTierStatus.failed){
                 return EContextTierStatus.failed;
             }
-            if(isLastTier && tierChanged.status == EContextTierStatus.completed){
+            if(isLastTier && tierChanged.status === EContextTierStatus.completed){
                 return EContextTierStatus.completed;
             }
             return EContextTierStatus.loading;
