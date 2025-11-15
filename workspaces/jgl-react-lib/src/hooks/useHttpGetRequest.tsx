@@ -9,12 +9,15 @@ export const useHttpGetRequest = <T,>({ request$ }: useHttpGetRequestProps<T>) =
     const [responseData, setResponseData] = useState<T | null>();
 
     useEffect(() => {
-        request$()
+        const subscription = request$()
             .subscribe({
                 next: ((response: T) => {
                     setResponseData(response);
                 })
             });
+        return () => {
+            subscription.unsubscribe();
+        };
     }, []);
 
     return responseData;
