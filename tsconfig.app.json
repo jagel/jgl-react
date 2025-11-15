@@ -21,19 +21,21 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
-    "erasableSyntaxOnly": true,
+    "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
     /* Path Mapping */
     "paths": {
       "@jgl-mui/*": ["./workspaces/jgl-mui/src/*"],
-      "@jgl-ui-lib/*": ["./workspaces/jgl-ui-lib/src/*"]
+      "@jgl-ui-lib/*": ["./workspaces/jgl-ui-lib/src/*"],
+      "@jgl-react-lib/*": ["./workspaces/jgl-react-lib/src/*"]
     }
   },
   "include": [
     "src",
     "workspaces/jgl-mui/src/**/*",
-    "workspaces/jgl-ui-lib/src/**/*"
+    "workspaces/jgl-ui-lib/src/**/*",
+    "workspaces/jgl-react-lib/src/**/*"
   ]
 }
