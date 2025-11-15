@@ -60,7 +60,7 @@ export const Appi18nContext : React.FC<Appi18nContextProps> = ({
 	}, [contextTiers]);
 
 	const geti18nText = (textKey: string): string => {
-		let textValue = i18nCatalog.find((x) => x.language == language && x.key == textKey);
+		let textValue = i18nCatalog.find((x) => x.language === language && x.key === textKey);
 
 		if (!textValue) {
 			console.warn(`${textKey} does not exist in i18n catalog`);
