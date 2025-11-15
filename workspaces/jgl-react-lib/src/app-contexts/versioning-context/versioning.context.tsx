@@ -55,10 +55,10 @@ export const AppVersioningContext: React.FC<AppVersioningContextProps> = ({
                     }
                 })
             } else {
-                setVersioningData(prev => {
-                    prev.appInfo = appData;
-                    return prev;
-                });
+                setVersioningData(prev => ({
+                    ...prev,
+                    appInfo: appData
+                }));
                 onTierChange({ service: EContextService.appVersioningService, status: EContextTierStatus.completed });
             }
         }
