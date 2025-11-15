@@ -1,0 +1,89 @@
+// #region Imports
+// React
+import React, { createContext, useEffect, useState } from "react";
+import { Observable } from "rxjs";
+
+// App libraries
+import { I18nCatalog } from "./i18n.models";
+import { I18nContextDefaults, LANGUAGE, LanguageType, iI18nContext } from "./i18n.definitions";
+import { ContextTier, ContextTierMessage, EContextService, EContextTierStatus } from "../../init-tier-component";
+// #endregion Imports
+
+export interface Appi18nContextProps {
+	initCatalog: () => Observable<Array<I18nCatalog>>;
+	defaultLanguage?: LanguageType;
+	onTierChange: (tier: ContextTier) => void;
+	children: any;
+	contextTiers: ContextTierMessage;
+}
+/**
+ * 
+ * @param props 
+ * @see {@link Appi18nContextProps  | the @internal tag}
+ * @returns Context
+ */
+export const Appi18nContext : React.FC<Appi18nContextProps> = ({
+	initCatalog,
+	onTierChange,
+	contextTiers,
+	children,
+	defaultLanguage = 'en'
+}) => {
+	const [language, setLanguage] = useState<LanguageType>(defaultLanguage);
+	const [i18nCatalog, setI18nCatalog] = useState<Array<I18nCatalog>>([]);
+
+
+	useEffect(() => {
+		const i18Service = contextTiers.contextsStatus.find(fi => fi.service === EContextService.i18nService);
+		
+		if (i18Service?.status === EContextTierStatus.init) {				
+			const languagePersisted = localStorage.getItem(LANGUAGE.KEY) as LanguageType | null;
+
+			if (!languagePersisted) {
+				localStorage.setItem(LANGUAGE.KEY, language);
+			} else {
+				setLanguage(languagePersisted);
+			}
+
+			initCatalog().subscribe({
+				next: (i18ncatalog) => {
+					// Set i18n catalog
+					setI18nCatalog(i18ncatalog);
+					// Update tier status
+					onTierChange({ service: EContextService.i18nService, status: EContextTierStatus.completed });
+				}, error: () => {
+					// Update tier status
+					onTierChange({ service: EContextService.i18nService, status: EContextTierStatus.failed });
+				}
+			});
+		}				
+	}, [contextTiers]);
+
+	const geti18nText = (textKey: string): string => {
+		let textValue = i18nCatalog.find((x) => x.language == language && x.key == textKey);
+
+		if (!textValue) {
+			console.warn(`${textKey} does not exist in i18n catalog`);
+		}
+
+		return textValue?.value ?? textKey;
+	}
+
+	const persistLanguage = (language: LanguageType) => {
+		localStorage.setItem(LANGUAGE.KEY, language);
+		setLanguage(language);
+	}
+
+	const i18ncontextValue: iI18nContext = {
+		language,
+		i18nCatalog,
+		setLanguage: (language: LanguageType) => persistLanguage(language),
+		geti18nText: (textKey: string) => geti18nText(textKey)
+	};
+
+	return <JglI18nContext.Provider value={i18ncontextValue}>
+		{children}
+	</JglI18nContext.Provider>
+}
+
+export const JglI18nContext = createContext<iI18nContext>(new I18nContextDefaults());
