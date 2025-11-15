@@ -13,7 +13,7 @@ const InitContextTier : React.FC<InitTierContextProps> = ({
         var total = onTierChange.contextsStatus.length;
         let percentage = 100;
         if(total>0){
-            var loadingCount = onTierChange.contextsStatus.filter(x=>x.status == EContextTierStatus.loading || x.status == EContextTierStatus.init || x.status == EContextTierStatus.queued).length;
+            var loadingCount = onTierChange.contextsStatus.filter(x=>x.status === EContextTierStatus.loading || x.status === EContextTierStatus.init || x.status === EContextTierStatus.queued).length;
             percentage = ((total - loadingCount)/total) * 100;
         }
         setPercentage(percentage);
