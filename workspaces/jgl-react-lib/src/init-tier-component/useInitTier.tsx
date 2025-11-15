@@ -32,7 +32,7 @@ export const useInitTier = (serviceTier: Array<EContextService> = []) : [Context
                 return tierChanged;
             }
             // If the previous tier is completed, set the next tier to init
-            if(tierIndex == (index + 1) && tierChanged.status == EContextTierStatus.completed){
+            if(tierIndex === (index + 1) && tierChanged.status === EContextTierStatus.completed){
                 return { ...tier, status: EContextTierStatus.init };
             }
             return tier;
