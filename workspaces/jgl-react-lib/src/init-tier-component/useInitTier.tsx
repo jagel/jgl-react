@@ -39,7 +39,7 @@ export const useInitTier = (serviceTier: Array<EContextService> = []) : [Context
         }
 
         const setGlobalSatus = () : EContextTierStatus => {
-            if(tierChanged.status == EContextTierStatus.failed){
+            if(tierChanged.status === EContextTierStatus.failed){
                 return EContextTierStatus.failed;
             }
             if(isLastTier && tierChanged.status == EContextTierStatus.completed){
