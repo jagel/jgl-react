@@ -1,2 +1,2 @@
-export type { iAppVersioningContextData, AppVersioningContextProps } from './versioning.definitions';
+export type { EndpointURL, AppInfo, AppVersioningContextData } from './versioning.definitions';
 export { AppVersioningContext, JglAppVersioningContext } from './versioning.context';

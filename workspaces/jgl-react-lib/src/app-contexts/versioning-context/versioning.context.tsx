@@ -1,14 +1,24 @@
 // #region Imports
 // React
 import React, { createContext, useEffect, useState } from "react";
+import { Observable } from "rxjs";
 
 // Library
-import { AppVersioningContextProps, iAppVersioningContextData } from "./versioning.definitions";
+import { AppInfo, AppVersioningContextData } from "./versioning.definitions";
 import { JglConstants } from "../../definitions/constants";
-import { AppInfo } from "../../models/app-Info.model";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import { EContextService, EContextTierStatus } from "../../init-tier-component";
+import { ContextTier, ContextTierMessage, EContextService, EContextTierStatus } from "../../init-tier-component";
 //#endregion Imports
+
+// #region Component props
+export interface AppVersioningContextProps {
+    expiresInMinutes?: number;
+    contextTiers: ContextTierMessage;
+    setData: () => Observable<AppInfo>;
+    onTierChange: (tier : ContextTier) => void;
+    children: React.ReactNode;
+}
+// #endregion Component props
 
 /**
  * Versioning context, retreive application information from the back end related to versioning
@@ -23,9 +33,12 @@ export const AppVersioningContext: React.FC<AppVersioningContextProps> = ({
     onTierChange,
     children }) => {
 
+    // #region Definitions
     const { setOrUpdateLocalStorage, tryGetLocalStorage } = useLocalStorage();
-    const [versioningData, setVersioningData] = useState<iAppVersioningContextData>({} as iAppVersioningContextData);
+    const [appInfo, setAppInfoData] = useState<AppInfo>({} as AppInfo);
+    // #endregion Definitions
 
+    // #region React hooks
     useEffect(() => {
         const versioningService = contextTiers.contextsStatus.find(fi => fi.service === EContextService.appVersioningService);
         if (versioningService?.status === EContextTierStatus.init) {
@@ -37,12 +50,12 @@ export const AppVersioningContext: React.FC<AppVersioningContextProps> = ({
                 setData().subscribe({
                     next: (versioningData) => {
                         // Set version data in Versioning context
-                        setVersioningData(versioningData);
+                        setAppInfo(versioningData);
 
                         // Store in local storage
                         setOrUpdateLocalStorage<AppInfo>(
                             JglConstants.localStorage.appVersion,
-                            versioningData.appInfo,
+                            versioningData,
                             expiresInMinutes)
                         // Update tier status
                         onTierChange({
@@ -55,7 +68,7 @@ export const AppVersioningContext: React.FC<AppVersioningContextProps> = ({
                     }
                 })
             } else {
-                setVersioningData(prev => ({
+                setAppInfoData(prev => ({
                     ...prev,
                     appInfo: appData
                 }));
@@ -63,18 +76,28 @@ export const AppVersioningContext: React.FC<AppVersioningContextProps> = ({
             }
         }
     }, [contextTiers]);
+    // #endregion React hooks
 
+    // #region Methods
+    const getAppInfo = () : AppInfo => appInfo;
+    const setAppInfo = (appInfoData : AppInfo) => setAppInfoData(appInfoData);
+    // #endregion Methods
 
-    return <JglAppVersioningContext.Provider value={versioningData}>
+    // #region Render
+    return <JglAppVersioningContext.Provider value={{
+        getAppInfo,
+        setAppInfo,
+        getUrlByCode : (code:string) : string | null => appInfo.apiUrl?.find(api => api.code === code)?.url || null,
+        getSecurityUrl : () : string => appInfo.securityUrl
+    }}>
         {children}
     </JglAppVersioningContext.Provider>
+    // #endregion Render
 }
 
-export const JglAppVersioningContext = createContext<iAppVersioningContextData>({
-    appInfo: {
-        appName: '',
-        appVersion: '',
-        guardianHealthCheck: false,
-        gatewayHealthCheck: false
-    }
+export const JglAppVersioningContext = createContext<AppVersioningContextData>({
+    getAppInfo : () => ({}) as AppInfo,
+    setAppInfo : () => {},
+    getUrlByCode : () => 'undefined',
+    getSecurityUrl : () => 'undefined'
 });

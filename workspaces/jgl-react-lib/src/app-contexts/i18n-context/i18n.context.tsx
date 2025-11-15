@@ -4,11 +4,12 @@ import React, { createContext, useEffect, useState } from "react";
 import { Observable } from "rxjs";
 
 // App libraries
-import { I18nCatalog } from "./i18n.models";
-import { I18nContextDefaults, LANGUAGE, LanguageType, iI18nContext } from "./i18n.definitions";
+import { I18nCatalog, I18nContext } from "./i18n.models";
+import { LANGUAGE, LanguageType } from "./i18n.definitions";
 import { ContextTier, ContextTierMessage, EContextService, EContextTierStatus } from "../../init-tier-component";
 // #endregion Imports
 
+// #region interfaces
 export interface Appi18nContextProps {
 	initCatalog: () => Observable<Array<I18nCatalog>>;
 	defaultLanguage?: LanguageType;
@@ -16,6 +17,9 @@ export interface Appi18nContextProps {
 	children: any;
 	contextTiers: ContextTierMessage;
 }
+// #endregion definitions
+
+
 /**
  * 
  * @param props 
@@ -29,10 +33,12 @@ export const Appi18nContext : React.FC<Appi18nContextProps> = ({
 	children,
 	defaultLanguage = 'en'
 }) => {
+	// #region Definitions
 	const [language, setLanguage] = useState<LanguageType>(defaultLanguage);
 	const [i18nCatalog, setI18nCatalog] = useState<Array<I18nCatalog>>([]);
+	// #endregion Definitions
 
-
+	// #region react hooks
 	useEffect(() => {
 		const i18Service = contextTiers.contextsStatus.find(fi => fi.service === EContextService.i18nService);
 		
@@ -58,7 +64,9 @@ export const Appi18nContext : React.FC<Appi18nContextProps> = ({
 			});
 		}				
 	}, [contextTiers]);
+	// #endregion react hooks
 
+	// #region methods
 	const geti18nText = (textKey: string): string => {
 		let textValue = i18nCatalog.find((x) => x.language === language && x.key === textKey);
 
@@ -73,17 +81,23 @@ export const Appi18nContext : React.FC<Appi18nContextProps> = ({
 		localStorage.setItem(LANGUAGE.KEY, language);
 		setLanguage(language);
 	}
+	// #endregion methods
 
-	const i18ncontextValue: iI18nContext = {
+	// #region render
+	return <JglI18nContext.Provider value={{
 		language,
 		i18nCatalog,
 		setLanguage: (language: LanguageType) => persistLanguage(language),
 		geti18nText: (textKey: string) => geti18nText(textKey)
-	};
-
-	return <JglI18nContext.Provider value={i18ncontextValue}>
+	}}>
 		{children}
 	</JglI18nContext.Provider>
+	// #endregion render
 }
 
-export const JglI18nContext = createContext<iI18nContext>(new I18nContextDefaults());
+const JglI18nContext = createContext<I18nContext>({
+	language : 'en',
+	i18nCatalog : [],
+	setLanguage: () => {},
+	geti18nText: () => 'unknown'
+});

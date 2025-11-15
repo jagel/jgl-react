@@ -1,7 +1,5 @@
-export type { AppInfo } from "./app-Info.model";
 export type  { HealthCheck, HealthCheckItem, HealthCheckData }  from "./health-check.model";
-export type { AppData, UserProfile, UserSession } from "./initialize.model";
-
+    
 export type { IFormApplication } from "./store-form.model";
 export type { IJglSelector } from "./selector.model";
 export { JglSelector } from "./selector.model";

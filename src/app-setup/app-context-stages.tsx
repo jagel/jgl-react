@@ -2,18 +2,17 @@
 
 // React
 import React from 'react';
+import { Observable } from 'rxjs';
 
 // MUI
 import Paper from '@mui/material/Paper';
 
 // JGL libraries
 import { EContextService, InitContextTier, LoadingComponentProps, useInitTier } from '@jgl-react-lib/init-tier-component';
-import { AppVersioningContext, iAppVersioningContextData } from '@jgl-react-lib/app-contexts/versioning-context';
+import { AppInfo, AppVersioningContext } from '@jgl-react-lib/app-contexts/versioning-context';
 import { Appi18nContext, I18nCatalog } from '@jgl-react-lib/app-contexts/i18n-context';
 
-import { Observable } from 'rxjs';
-import { UserSessionContext } from '@jgl-react-lib/app-contexts';
-import { AppData } from '@jgl-react-lib/models';
+import { UserSessionContext, UserSessionModel } from '@jgl-react-lib/app-contexts';
 
 // #endregion Imports
 
@@ -45,12 +44,19 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
     //#endregion Initializations
 
     // #region Methods
-    const mockInitVersionContext = () : Observable<iAppVersioningContextData> => 
-        new Observable<iAppVersioningContextData>(subscriber => {
+    const mockInitVersionContext = () : Observable<AppInfo> => 
+        new Observable<AppInfo>(subscriber => {
             setTimeout(() => {
-                subscriber.next({
-                    appInfo: { appName: 'Demo React App', appVersion: 'X.Y.Z', guardianHealthCheck: true, gatewayHealthCheck: true }                    
-                });
+                subscriber.next(
+                    {
+                        appName: 'Demo React App',
+                        appVersion: 'X.Y.Z',
+                        defaultLanguage: 'en',
+                        securityUrl: 'https://security.demo.com',
+                        apiUrl: [{url: 'https://api.demo.com/v1', code: 'v1'},],
+                        healthySecurityService: true,
+                        healthyApiService: true
+                    });
                 // subscriber.error('Mock initialization failed');
                 subscriber.complete();
             }, 1000)
@@ -67,26 +73,33 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
             }, 3000)
         });
 
-     const mockGetUser = () : Observable<AppData> => 
-        new Observable<AppData>(subscriber => {
+     const mockGetUser = () : Observable<UserSessionModel> => 
+        new Observable<UserSessionModel>(subscriber => {
             setTimeout(() => {
                 subscriber.next({
-                    userSession: {
-                        accessToken: '',
-                        idToken: '',
-                        expiredDate: new Date(Date.now()),
-                        refreshToken: '',
-                        sub: '',
-                        roles: ['Admin', 'User','Guest'],
-                        scopes: ['read', 'write'],
-                    },
                     userProfile: {
-                        name: '',
-                        email: '',
-                        accessClaims: ['claim1', 'claim2']
+                        name: 'test',
+                        email: 'mail@test.com',
+                        username: 'username_test',
+                        intitials: 'TT'
                     },
-                    language: 'en',
-                    gatewayUri: 'https://api.demo.com',
+                    accessData: {
+                        accessToken: '<mocked_token>',
+                        idToken: '<mocked_id_token>',
+                        expiredDate: new Date(Date.now()),
+                        refreshToken: '<mocked_refresh_token>',
+                        sub: '<mocked_sub>',
+                        roles: ['Admin', 'User','Guest'],
+                        roleAccess: ['read', 'write'],
+                    },
+                    userPreferences:{
+                        theme: 'light',
+                        timeZone: 'GMT-MOCK',
+                        language: 'en',
+                        apiCode: 'v1',
+                        regionCode: 'US'
+                    },
+                    isLoggedIn: true
                 });
                 subscriber.complete();
             }, 2000)
