@@ -24,7 +24,7 @@ export const useInitTier = (serviceTier: Array<EContextService> = []) : [Context
     //#region Methods
     const updateInitTier = function(tierChanged : ContextTier) {
         const index =  serviceTier.findIndex(x=> x == tierChanged.service);
-        const isLastTier = index == (serviceTier.length -1);
+        const isLastTier = index === (serviceTier.length -1);
         
         const setTier = (tier: ContextTier, tierIndex:number) => {
             // Update the tier that changed
