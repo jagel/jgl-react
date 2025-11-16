@@ -1,72 +1,41 @@
 // #region Imports
 // React
 import React, { createContext, ReactNode, useEffect, useState } from "react";
-import { Observable } from "rxjs";
 
 // Library
 import { UserSessionContextModel, UserPreferences,UserProfile, UserSessionModel, AccessData } from "./user-session.model";
-import { ContextTier, ContextTierMessage, EContextService, EContextTierStatus } from "../../init-tier-component/init-tier.definitions";
 import { AccessValidationType } from "./user-session.definitions";
 //#endregion Imports
 
 export interface UserSessionContextProps {
+    userSession: UserSessionModel;
     children: ReactNode;
-    getUser: () => Observable<UserSessionModel>;
-    contextTiers: ContextTierMessage;
-    onTierChange: (tier: ContextTier) => void
 }
 
-
 export const UserSessionContext: React.FC<UserSessionContextProps> = ({
-    children,
-    getUser,
-    contextTiers,
-    onTierChange
+    userSession,
+    children
 }) => {
     // #region Definitions
-    const [userSession, setUserSession] = useState<UserSessionModel>({} as UserSessionModel);
+    const [userSessionData, setUserSessionData] = useState<UserSessionModel>(userSession);
     // #endregion Definitions
     
     // #region react hooks
     useEffect(() => {
-        const sessionService = contextTiers.contextsStatus.find(fi => fi.service === EContextService.sessionService);
-        if (sessionService?.status === EContextTierStatus.init && contextTiers.globalStatus !== EContextTierStatus.failed) {
-            
-            onTierChange({
-                service: EContextService.sessionService,
-                status: EContextTierStatus.loading 
-            });
-            
-            getUser().subscribe({
-                next: (response: UserSessionModel) => {
-                    // Set user session data
-                    setUserSession(response);
-                    // Update tier status
-                    onTierChange({
-                        service: EContextService.sessionService,
-                        status: EContextTierStatus.completed
-                    });
-                }, error: () => {
-                    onTierChange({
-                        service: EContextService.sessionService,
-                        status: EContextTierStatus.failed
-                    });
-                },
-            });
-        }
-    }, [contextTiers]);
+        setUserSessionData(userSession);
+    }, [userSession]);
     // #endregion react hooks
 
     // #region methods
-    const getUserProfile = (): UserProfile => userSession.isLoggedIn ? userSession.userProfile as UserProfile : {} as UserProfile;
-    const getAccessData = (): AccessData => userSession.isLoggedIn ? userSession.accessData as AccessData : {} as AccessData;
-    const getUserPreferences = (): UserPreferences => userSession.isLoggedIn ? userSession.userPreferences as UserPreferences : {} as UserPreferences;
+    const getUserProfile = (): UserProfile => userSessionData.isLoggedIn ? userSessionData.userProfile as UserProfile : {} as UserProfile;
+    const getAccessData = (): AccessData => userSessionData.isLoggedIn ? userSessionData.accessData as AccessData : {} as AccessData;
+    const getUserPreferences = (): UserPreferences => userSessionData.isLoggedIn ? userSessionData.userPreferences as UserPreferences : {} as UserPreferences;
     const isUserInRoles = (roles: Array<string>,validation: AccessValidationType ) => {
         switch(validation){
             case 'any':
-                return roles.some(r => userSession.accessData?.roles.includes(r));
+                return roles.some(r => userSessionData.accessData?.roles.includes(r));
             case 'all':
-                return roles.every(r => userSession.accessData?.roles.includes(r));
+                return roles.every(r => userSessionData.accessData?.roles.includes(r));
             default:
                 return false;
         }
@@ -74,9 +43,9 @@ export const UserSessionContext: React.FC<UserSessionContextProps> = ({
         const hasUserAccess = (accessCodes: Array<string>,validation: AccessValidationType ) => {
         switch(validation){
             case 'any':
-                return accessCodes.some(ra => userSession.accessData?.roleAccess.includes(ra));
+                return accessCodes.some(ra => userSessionData.accessData?.roleAccess.includes(ra));
             case 'all':
-                return accessCodes.every(ra => userSession.accessData?.roleAccess.includes(ra));
+                return accessCodes.every(ra => userSessionData.accessData?.roleAccess.includes(ra));
             default:
                 return false;
         }
@@ -90,7 +59,7 @@ export const UserSessionContext: React.FC<UserSessionContextProps> = ({
         getUserPreferences : getUserPreferences,
         isUserInRoles : isUserInRoles,
         hasUserAccess : hasUserAccess,
-        isUserLoggedIn : () => userSession.isLoggedIn
+        isUserLoggedIn : () => userSessionData.isLoggedIn
     }}>
         {children}
     </JglUserSessionContext.Provider>

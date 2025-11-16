@@ -1,5 +1,3 @@
-import React from "react";
-
 export enum EContextTierStatus {
     queued,
     init,
@@ -9,7 +7,7 @@ export enum EContextTierStatus {
 }
 
 export enum EContextService {
-    appVersioningService,
+    appInfoService,
     i18nService,
     sessionService,
 }
@@ -26,19 +24,18 @@ export interface ContextTierMessage {
 
 export interface LoadingComponentProps{
     contextTier: ContextTierMessage;
-    percentageCompleted: number;
+    tierInfo: InitTierInfo;
 }
 
-export interface InitTierContextProps{
-    children: React.ReactNode;
-    loadingComponent: React.FC<LoadingComponentProps>;
-    errorComponent: React.FC<LoadingComponentProps>;
-    onTierChange: ContextTierMessage;
+export interface InitTierInfo{
+    loadingPercentage: number;
+    totalServices:number;
+    completedServices:number;
 }
 
 export const TIER_MSG = {
     service:(eService: EContextService) : string => {switch(eService){
-        case EContextService.appVersioningService: return 'App Versioning Service';
+        case EContextService.appInfoService: return 'App Versioning Service';
         case EContextService.i18nService: return 'Internationalization Service';
         case EContextService.sessionService: return 'User Session Service';
         default: return 'Unknown Service';
