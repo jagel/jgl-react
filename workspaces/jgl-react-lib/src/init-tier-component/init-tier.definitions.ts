@@ -9,8 +9,8 @@ export enum EContextTierStatus {
 }
 
 export enum EContextService {
-    i18nService,
     appVersioningService,
+    i18nService,
     sessionService,
 }
 
@@ -35,3 +35,20 @@ export interface InitTierContextProps{
     errorComponent: React.FC<LoadingComponentProps>;
     onTierChange: ContextTierMessage;
 }
+
+export const TIER_MSG = {
+    service:(eService: EContextService) : string => {switch(eService){
+        case EContextService.appVersioningService: return 'App Versioning Service';
+        case EContextService.i18nService: return 'Internationalization Service';
+        case EContextService.sessionService: return 'User Session Service';
+        default: return 'Unknown Service';
+    }},
+    status:(eStatus: EContextTierStatus) : string => {switch(eStatus){
+        case EContextTierStatus.queued: return 'Queued';
+        case EContextTierStatus.init: return 'Initializing';
+        case EContextTierStatus.loading: return 'Loading';
+        case EContextTierStatus.completed: return 'Completed';
+        case EContextTierStatus.failed: return 'Failed';
+        default: return 'Unknown Status';
+    }}
+    }

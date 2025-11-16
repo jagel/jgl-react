@@ -8,3 +8,4 @@
 // TODO: Add your actual component exports here
 
 export * from './table/index';
+export * from './pages/index';

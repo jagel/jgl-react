@@ -2,18 +2,16 @@
 
 // React
 import React from 'react';
-
-// MUI
-import Paper from '@mui/material/Paper';
+import { Observable, tap } from 'rxjs';
 
 // JGL libraries
-import { EContextService, InitContextTier, LoadingComponentProps, useInitTier } from '@jgl-react-lib/init-tier-component';
-import { AppVersioningContext, iAppVersioningContextData } from '@jgl-react-lib/app-contexts/versioning-context';
+import { EContextService, EContextTierStatus, InitContextTier, LoadingComponentProps, TIER_MSG, useInitTier } from '@jgl-react-lib/init-tier-component';
+import { LoadingPage, ErrorPage } from '@jgl-mui/pages';
+import { AppInfo, AppVersioningContext } from '@jgl-react-lib/app-contexts/versioning-context';
 import { Appi18nContext, I18nCatalog } from '@jgl-react-lib/app-contexts/i18n-context';
 
-import { Observable } from 'rxjs';
-import { UserSessionContext } from '@jgl-react-lib/app-contexts';
-import { AppData } from '@jgl-react-lib/models';
+import { UserSessionContext, UserSessionModel } from '@jgl-react-lib/app-contexts';
+import { useColorScheme } from '@mui/material';
 
 // #endregion Imports
 
@@ -42,16 +40,23 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
         EContextService.i18nService,
         EContextService.sessionService
     ]);
+    const {setMode} = useColorScheme();
     //#endregion Initializations
 
     // #region Methods
-    const mockInitVersionContext = () : Observable<iAppVersioningContextData> => 
-        new Observable<iAppVersioningContextData>(subscriber => {
+    const mockInitVersionContext = () : Observable<AppInfo> => 
+        new Observable<AppInfo>(subscriber => {
             setTimeout(() => {
-                subscriber.next({
-                    appInfo: { appName: 'Demo React App', appVersion: 'X.Y.Z', guardianHealthCheck: true, gatewayHealthCheck: true }                    
-                });
-                // subscriber.error('Mock initialization failed');
+                subscriber.next(
+                    {
+                        appName: 'Demo React App',
+                        appVersion: 'X.Y.Z',
+                        defaultLanguage: 'en',
+                        securityUrl: 'https://security.demo.com',
+                        apiUrl: [{url: 'https://api.demo.com/v1', code: 'v1'},],
+                        healthySecurityService: true,
+                        healthyApiService: true
+                    });
                 subscriber.complete();
             }, 1000)
         });
@@ -64,45 +69,65 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
                     {language: 'en', key: 'create', value: 'Create'}, {language: 'es', key: 'create', value: 'Crear'}
                 ]);
                 subscriber.complete();
-            }, 3000)
+            }, 1000)
         });
 
-     const mockGetUser = () : Observable<AppData> => 
-        new Observable<AppData>(subscriber => {
+     const mockGetUser = () : Observable<UserSessionModel> => 
+        new Observable<UserSessionModel>(subscriber => {
             setTimeout(() => {
                 subscriber.next({
-                    userSession: {
-                        accessToken: '',
-                        idToken: '',
-                        expiredDate: new Date(Date.now()),
-                        refreshToken: '',
-                        sub: '',
-                        roles: ['Admin', 'User','Guest'],
-                        scopes: ['read', 'write'],
-                    },
                     userProfile: {
-                        name: '',
-                        email: '',
-                        accessClaims: ['claim1', 'claim2']
+                        name: 'test',
+                        email: 'mail@test.com',
+                        username: 'username_test',
+                        initials: 'TT'
                     },
-                    language: 'en',
-                    gatewayUri: 'https://api.demo.com',
+                    accessData: {
+                        accessToken: '<mocked_token>',
+                        idToken: '<mocked_id_token>',
+                        expiredDate: new Date(Date.now()),
+                        refreshToken: '<mocked_refresh_token>',
+                        sub: '<mocked_sub>',
+                        roles: ['Admin', 'User','Guest'],
+                        roleAccess: ['read', 'write'],
+                    },
+                    userPreferences:{
+                        theme: 'light',
+                        timeZone: 'GMT-MOCK',
+                        language: 'en',
+                        apiCode: 'v1',
+                        regionCode: 'US'
+                    },
+                    isLoggedIn: true
                 });
                 subscriber.complete();
-            }, 2000)
-        });
+            }, 5000)
+        }).pipe(tap(data => {
+            if(data.isLoggedIn){
+                const mode = data.userPreferences?.theme ?? 'light'; 
+                setMode(mode === 'light' ? 'light' : 'dark');
+            }
+        }));
     // #endregion Methods
     
     // #region Render
-    const loadingComponent: React.FC<LoadingComponentProps> = ({ percentageCompleted }) => (
-        <Paper style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div>Loading... {percentageCompleted.toFixed(0)}%</div>
-        </Paper>
+    const loadingComponent: React.FC<LoadingComponentProps> = ({ contextTier, percentageCompleted }) => (
+        <LoadingPage 
+            percentageCompleted={percentageCompleted}
+            title="Initializing Application"
+            currentOperation={TIER_MSG.service(contextTier.contextsStatus.find(ctier => [EContextTierStatus.init, EContextTierStatus.loading].some(status => status === ctier.status)  )?.service ?? EContextService.i18nService)}
+            showPercentage={true}
+            minHeight="100vh"
+        />
     );
     const errorComponent: React.FC<LoadingComponentProps> = () => (
-        <Paper style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <p>Error during initialization. Please try again later. </p>
-        </Paper>
+        <ErrorPage 
+            title="Initialization Failed"
+            message="We encountered an error while setting up the application."
+            details="The application failed to initialize properly. This could be due to a network issue or a temporary service problem."
+            minHeight="100vh"
+            showActions={false}
+        />
     );
 
     
