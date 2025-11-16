@@ -50,7 +50,12 @@ export const useInitTier = (
 
         const sub = concat(...requests).subscribe({
             next: (tierServiceCompleted) => {
-                updateInitTier(initTier.contextsStatus.find(ct => ct.service === tierServiceCompleted)!);
+                const foundTier = initTier.contextsStatus.find(ct => ct.service === tierServiceCompleted);
+                if (foundTier) {
+                    updateInitTier(foundTier);
+                } else {
+                    console.warn(`No matching context tier found for service: ${tierServiceCompleted}`);
+                }
 
                 setTierInfo(prev => ({
                     ...prev,
@@ -81,7 +86,7 @@ export const useInitTier = (
 
     //#region Methods
     const updateInitTier = function(tierChanged : ContextTier) {
-        const index =  contextsTiers.findIndex(x=> x.service == tierChanged.service);
+        const index =  contextsTiers.findIndex(x=> x.service === tierChanged.service);
         const isLastTier = index === (contextsTiers.length -1);
         const failed = tierChanged.status === EContextTierStatus.failed;
         
