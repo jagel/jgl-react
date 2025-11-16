@@ -43,8 +43,8 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
     );
     
     // tier definitnions
-    const initAppInfo : UseInitTierProps = { service: EContextService.appInfoService, getData$: () => getAppInfo().pipe(map(appInfo => { setAppInfo(appInfo); })) };
-    const initI18n : UseInitTierProps = { service: EContextService.i18nService, getData$: () => mockInitI18nCatalogContext().pipe(map(i18nCatalog => { setI18nCatalog(i18nCatalog); })) };
+    const initAppInfo : UseInitTierProps = { service: EContextService.appInfoService, getData$: () => getAppInfo().pipe(map(appInfo => { setAppInfo(appInfo);return; })) };
+    const initI18n : UseInitTierProps = { service: EContextService.i18nService, getData$: () => mockInitI18nCatalogContext().pipe(map(i18nCatalog => { setI18nCatalog(i18nCatalog);return; })) };
     const initUserSession : UseInitTierProps = { service: EContextService.sessionService, getData$: userSessionWithThemeSetted };
     // #endregion Definitions
 
