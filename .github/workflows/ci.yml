@@ -35,20 +35,20 @@ jobs:
     # - name: Run tests
     #   run: npm run test
     
-    - name: Create npm packages
-      run: |
-        cd workspaces/jgl-ui-lib && npm pack
-        cd ../jgl-react-lib && npm pack
-        cd ../jgl-mui && npm pack
+    # - name: Create npm packages
+    #   run: |
+    #     cd workspaces/jgl-ui-lib && npm pack
+    #     cd ../jgl-react-lib && npm pack
+    #     cd ../jgl-mui && npm pack
 
-    - name: Upload package artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: npm-packages
-        path: |
-          workspaces/jgl-ui-lib/*.tgz
-          workspaces/jgl-react-lib/*.tgz
-          workspaces/jgl-mui/*.tgz
+    # - name: Upload package artifacts
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: npm-packages
+    #     path: |
+    #       workspaces/jgl-ui-lib/*.tgz
+    #       workspaces/jgl-react-lib/*.tgz
+    #       workspaces/jgl-mui/*.tgz
 
     - name: Build project
       run: npm run build
