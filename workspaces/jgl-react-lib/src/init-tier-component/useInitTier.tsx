@@ -44,7 +44,12 @@ export const useInitTier = (
 
         const sub = concat(...requests).subscribe({
             next: (tierServiceCompleted) => {
-                updateInitTier(initTier.contextsStatus.find(ct => ct.service === tierServiceCompleted)!);
+                const foundTier = initTier.contextsStatus.find(ct => ct.service === tierServiceCompleted);
+                if (foundTier) {
+                    updateInitTier(foundTier);
+                } else {
+                    console.warn(`No matching context tier found for service: ${tierServiceCompleted}`);
+                }
 
                 setTierInfo(prev => ({
                     ...prev,
