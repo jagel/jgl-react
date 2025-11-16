@@ -54,7 +54,11 @@ export const useInitTier = (
             },
             complete: () => {
                 setTierInfo(prev => ({...prev, loadingPercentage: 100, completedServices: prev.totalServices}) );
-                setInitTier(prev => ({...prev, globalStatus: EContextTierStatus.completed}));
+                
+                // Finalize global status as completed, delayed to ensure UI updates
+                setTimeout(() => {
+                    setInitTier(prev => ({...prev, globalStatus: EContextTierStatus.completed}));
+                }, 150);
             },
             error: (error) => {
                 setInitTier(prev => ({...prev, globalStatus: EContextTierStatus.failed}));

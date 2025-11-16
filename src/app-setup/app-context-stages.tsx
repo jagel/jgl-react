@@ -20,8 +20,6 @@ import { useGetInitializers } from '../hooks/get-initializers.api';
 
 // #endregion Imports
 
-
-
 export const AppContextStages = ({children} : React.PropsWithChildren) => {
 
     // #region Definitions
@@ -36,16 +34,18 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
     // hook helpers
     const {setMode} = useColorScheme();
     const { getAppInfo } = useAppInfo(mockInitAppInfoContext, {enableLocalStorage:false, expiresInMinutes:120} );
-
+    const userSessionWithThemeSetted = () => mockGetUser().pipe(map(usData => { 
+            if(usData.isLoggedIn){
+                setMode(usData.userPreferences?.theme == 'light' ? 'light' : 'dark' );
+            }
+            setUserSession(usData); 
+        })
+    );
+    
     // tier definitnions
     const initAppInfo : UseInitTierProps = { service: EContextService.appInfoService, getData$: () => getAppInfo().pipe(map(appInfo => { setAppInfo(appInfo); })) };
     const initI18n : UseInitTierProps = { service: EContextService.i18nService, getData$: () => mockInitI18nCatalogContext().pipe(map(i18nCatalog => { setI18nCatalog(i18nCatalog); })) };
-    const initUserSession : UseInitTierProps = { service: EContextService.sessionService, getData$: () => mockGetUser().pipe(map(usData => { 
-        if(usData.isLoggedIn){
-            setMode(usData.userPreferences?.theme == 'light' ? 'light' : 'dark' );
-        }
-        setUserSession(usData); 
-    })) };
+    const initUserSession : UseInitTierProps = { service: EContextService.sessionService, getData$: userSessionWithThemeSetted };
     // #endregion Definitions
 
 
@@ -70,7 +70,6 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
             showActions={false}
         />
     );
-
     
     return (
     <AppInfoContext appInfo={appInfo} >
@@ -78,7 +77,8 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
             <UserSessionContext userSession={userSession}>
                 <InitContextTier 
                     contextTiers={[initAppInfo, initI18n, initUserSession]}
-                    loadingComponent={loadingComponent} errorComponent={errorComponent}
+                    loadingComponent={loadingComponent}
+                    errorComponent={errorComponent}
                     enableDebug={true}
                     >
                     {children}

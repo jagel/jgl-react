@@ -6,18 +6,17 @@ export const useGetInitializers = () => {
      const mockInitAppInfoContext = () : Observable<AppInfo> => 
         new Observable<AppInfo>(subscriber => {
             setTimeout(() => {
-                subscriber.error(new Error('Failed to load App Info'));
-                // subscriber.next(
-                //     {
-                //         appName: 'Demo React App',
-                //         appVersion: 'X.Y.Z',
-                //         defaultLanguage: 'en',
-                //         securityUrl: 'https://security.demo.com',
-                //         apiUrl: [{url: 'https://api.demo.com/v1', code: 'v1'},],
-                //         healthySecurityService: true,
-                //         healthyApiService: true
-                //     });
-                // subscriber.complete();
+                subscriber.next(
+                    {
+                        appName: 'Demo React App',
+                        appVersion: 'X.Y.Z',
+                        defaultLanguage: 'en',
+                        securityUrl: 'https://security.demo.com',
+                        apiUrl: [{url: 'https://api.demo.com/v1', code: 'v1'},],
+                        healthySecurityService: true,
+                        healthyApiService: true
+                    });
+                subscriber.complete();
             }, 1000)
         });
 
@@ -52,7 +51,7 @@ export const useGetInitializers = () => {
                         roleAccess: ['read', 'write'],
                     },
                     userPreferences:{
-                        theme: 'light',
+                        theme: 'dark', // test with 'light' or 'dark'
                         timeZone: 'GMT-MOCK',
                         language: 'en',
                         apiCode: 'v1',

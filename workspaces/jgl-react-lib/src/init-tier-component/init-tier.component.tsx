@@ -4,6 +4,7 @@
 import React from "react";
 import { EContextTierStatus, LoadingComponentProps, TIER_MSG } from "./init-tier.definitions";
 import { useInitTier, UseInitTierProps } from "./useInitTier";
+import DebuggerConsole from "../helper-pages/debugger-console.component";
 // #endregion Imports
 
 // #region Definitions
@@ -11,8 +12,8 @@ export interface InitTierContextProps{
     contextTiers: UseInitTierProps[];
     loadingComponent: React.FC<LoadingComponentProps>;
     errorComponent: React.FC<LoadingComponentProps>;    
-    children: React.ReactNode;
     enableDebug?: boolean;
+    children: React.ReactNode;
 }
 
 // #endregion Definitions
@@ -31,30 +32,42 @@ const InitContextTier : React.FC<InitTierContextProps> = ({
 }) => {
 
     const [initTier, appInfo] = useInitTier(contextTiers);
-    const DebuggerConsole = (children: React.ReactNode) : React.ReactNode => {
-        return <>
-            <code>
-                <pre>{JSON.stringify({
-                    globalStatus : TIER_MSG.status(initTier.globalStatus),
-                    contextStatus : initTier.contextsStatus.map(ctier => ({ service: TIER_MSG.service(ctier.service), status: TIER_MSG.status(ctier.status) })),
-                    }, null, 2)}</pre>
-            </code>
-            <hr />
-            {children}
-        </>
-    };
     
+    // Prepare debug data for the DebuggerConsole
+    const debugData = {
+        globalStatus: TIER_MSG.status(initTier.globalStatus),
+        contextStatus: initTier.contextsStatus.map(ctier => ({ 
+            service: TIER_MSG.service(ctier.service), 
+            status: TIER_MSG.status(ctier.status) 
+        })),
+    };
+
     switch(initTier.globalStatus){
         case EContextTierStatus.queued:
         case EContextTierStatus.init:
         case EContextTierStatus.loading:
-            return enableDebug ? DebuggerConsole(loadingComponent({contextTier: initTier, tierInfo: appInfo}) as React.ReactNode)  : loadingComponent({contextTier: initTier, tierInfo: appInfo}) ;
+            const loadingContent = loadingComponent({contextTier: initTier, tierInfo: appInfo}) as React.ReactNode;
+            return enableDebug ? (
+                <DebuggerConsole debugData={debugData} section="InitContextTier loading">
+                    {loadingContent}
+                </DebuggerConsole>
+            ) : loadingContent;
         case EContextTierStatus.completed:
             return children;
         case EContextTierStatus.failed:
-            return enableDebug ? DebuggerConsole(errorComponent({contextTier: initTier, tierInfo: appInfo}) as React.ReactNode)  : errorComponent({contextTier: initTier, tierInfo: appInfo}) ;
+            const errorContent = errorComponent({contextTier: initTier, tierInfo: appInfo}) as React.ReactNode;
+            return enableDebug ? (
+                <DebuggerConsole debugData={debugData} section="InitContextTier failed">
+                    {errorContent}
+                </DebuggerConsole>
+            ) : errorContent;
         default:
-            return enableDebug ? DebuggerConsole(errorComponent({contextTier: initTier, tierInfo: appInfo}) as React.ReactNode)  : errorComponent({contextTier: initTier, tierInfo: appInfo}) ;
+            const defaultErrorContent = errorComponent({contextTier: initTier, tierInfo: appInfo}) as React.ReactNode;
+            return enableDebug ? (
+                <DebuggerConsole debugData={debugData} section="InitContextTier undefined">
+                    {defaultErrorContent}
+                </DebuggerConsole>
+            ) : defaultErrorContent;
     }
 }
 
