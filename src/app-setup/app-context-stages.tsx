@@ -2,118 +2,59 @@
 
 // React
 import React from 'react';
-import { Observable, tap } from 'rxjs';
+import { map } from 'rxjs';
+
+// MUI
+import { useColorScheme } from '@mui/material';
 
 // JGL libraries
-import { EContextService, EContextTierStatus, InitContextTier, LoadingComponentProps, TIER_MSG, useInitTier } from '@jgl-react-lib/init-tier-component';
+import { EContextService, EContextTierStatus, InitContextTier, LoadingComponentProps, TIER_MSG } from '@jgl-react-lib/init-tier-component';
 import { LoadingPage, ErrorPage } from '@jgl-mui/pages';
-import { AppInfo, AppVersioningContext } from '@jgl-react-lib/app-contexts/versioning-context';
+import { AppInfo, AppInfoContext, useAppInfo } from '@jgl-react-lib/app-contexts/app-info-context';
 import { Appi18nContext, I18nCatalog } from '@jgl-react-lib/app-contexts/i18n-context';
-
 import { UserSessionContext, UserSessionModel } from '@jgl-react-lib/app-contexts';
-import { useColorScheme } from '@mui/material';
+import { UseInitTierProps } from '@jgl-react-lib/init-tier-component/useInitTier';
+
+// App imports
+import { useGetInitializers } from '../hooks/get-initializers.api';
 
 // #endregion Imports
 
-/*
-// Option 1: Using ReactNode (most common and flexible)
-export const ContextStages = (props: { children: ReactNode }) => {
-    return <label>demo label</label>
-}
 
-// Option 2: Using React.PropsWithChildren utility type
-export const ContextStages = (props: React.PropsWithChildren) => {
-    return <label>demo label</label>
-}
-
-// Option 3: If you need additional props with children
-export const ContextStages = (props: React.PropsWithChildren<{ someOtherProp?: string }>) => {
-    return <label>demo label</label>
-}
-*/
 
 export const AppContextStages = ({children} : React.PropsWithChildren) => {
 
-    //#region Initializations
-	const [initTier, updateInitTier] = useInitTier([
-        EContextService.appVersioningService,
-        EContextService.i18nService,
-        EContextService.sessionService
-    ]);
+    // #region Definitions
+
+    // Context data states
+    const [appInfo, setAppInfo] = React.useState<AppInfo>({} as AppInfo);
+    const [i18nCatalog, setI18nCatalog] = React.useState<Array<I18nCatalog>>([]);
+    const [userSession, setUserSession] = React.useState<UserSessionModel>({isLoggedIn:false} as UserSessionModel);
+
+    const { mockInitAppInfoContext, mockInitI18nCatalogContext, mockGetUser } = useGetInitializers();
+
+    // hook helpers
     const {setMode} = useColorScheme();
+    const { getAppInfo } = useAppInfo(mockInitAppInfoContext, {enableLocalStorage:false, expiresInMinutes:120} );
+
+    // tier definitnions
+    const initAppInfo : UseInitTierProps = { service: EContextService.appInfoService, getData$: () => getAppInfo().pipe(map(appInfo => { setAppInfo(appInfo); })) };
+    const initI18n : UseInitTierProps = { service: EContextService.i18nService, getData$: () => mockInitI18nCatalogContext().pipe(map(i18nCatalog => { setI18nCatalog(i18nCatalog); })) };
+    const initUserSession : UseInitTierProps = { service: EContextService.sessionService, getData$: () => mockGetUser().pipe(map(usData => { 
+        if(usData.isLoggedIn){
+            setMode(usData.userPreferences?.theme == 'light' ? 'light' : 'dark' );
+        }
+        setUserSession(usData); 
+    })) };
+    // #endregion Definitions
+
+
     //#endregion Initializations
-
-    // #region Methods
-    const mockInitVersionContext = () : Observable<AppInfo> => 
-        new Observable<AppInfo>(subscriber => {
-            setTimeout(() => {
-                subscriber.next(
-                    {
-                        appName: 'Demo React App',
-                        appVersion: 'X.Y.Z',
-                        defaultLanguage: 'en',
-                        securityUrl: 'https://security.demo.com',
-                        apiUrl: [{url: 'https://api.demo.com/v1', code: 'v1'},],
-                        healthySecurityService: true,
-                        healthyApiService: true
-                    });
-                subscriber.complete();
-            }, 1000)
-        });
-
-     const mockInitI18nCatalogContext = () : Observable<Array<I18nCatalog>> => 
-        new Observable<Array<I18nCatalog>>(subscriber => {
-            setTimeout(() => {
-                subscriber.next([
-                    {language: 'en', key: 'greeting', value: 'Hello'}, {language: 'es', key: 'greeting', value: 'Hola'},
-                    {language: 'en', key: 'create', value: 'Create'}, {language: 'es', key: 'create', value: 'Crear'}
-                ]);
-                subscriber.complete();
-            }, 1000)
-        });
-
-     const mockGetUser = () : Observable<UserSessionModel> => 
-        new Observable<UserSessionModel>(subscriber => {
-            setTimeout(() => {
-                subscriber.next({
-                    userProfile: {
-                        name: 'test',
-                        email: 'mail@test.com',
-                        username: 'username_test',
-                        initials: 'TT'
-                    },
-                    accessData: {
-                        accessToken: '<mocked_token>',
-                        idToken: '<mocked_id_token>',
-                        expiredDate: new Date(Date.now()),
-                        refreshToken: '<mocked_refresh_token>',
-                        sub: '<mocked_sub>',
-                        roles: ['Admin', 'User','Guest'],
-                        roleAccess: ['read', 'write'],
-                    },
-                    userPreferences:{
-                        theme: 'light',
-                        timeZone: 'GMT-MOCK',
-                        language: 'en',
-                        apiCode: 'v1',
-                        regionCode: 'US'
-                    },
-                    isLoggedIn: true
-                });
-                subscriber.complete();
-            }, 5000)
-        }).pipe(tap(data => {
-            if(data.isLoggedIn){
-                const mode = data.userPreferences?.theme ?? 'light'; 
-                setMode(mode === 'light' ? 'light' : 'dark');
-            }
-        }));
-    // #endregion Methods
     
     // #region Render
-    const loadingComponent: React.FC<LoadingComponentProps> = ({ contextTier, percentageCompleted }) => (
+    const loadingComponent: React.FC<LoadingComponentProps> = ({ contextTier, tierInfo }) => (
         <LoadingPage 
-            percentageCompleted={percentageCompleted}
+            percentageCompleted={tierInfo.loadingPercentage}
             title="Initializing Application"
             currentOperation={TIER_MSG.service(contextTier.contextsStatus.find(ctier => [EContextTierStatus.init, EContextTierStatus.loading].some(status => status === ctier.status)  )?.service ?? EContextService.i18nService)}
             showPercentage={true}
@@ -132,15 +73,19 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
 
     
     return (
-    <AppVersioningContext setData={() => mockInitVersionContext()} contextTiers={initTier} onTierChange={updateInitTier}>
-        <Appi18nContext initCatalog={() => mockInitI18nCatalogContext()} contextTiers={initTier} onTierChange={updateInitTier}>
-            <UserSessionContext getUser={mockGetUser} contextTiers={initTier} onTierChange={updateInitTier}>
-                <InitContextTier loadingComponent={loadingComponent} errorComponent={errorComponent} onTierChange={initTier}>
+    <AppInfoContext appInfo={appInfo} >
+        <Appi18nContext i18nCatalog={i18nCatalog} defaultLanguage='en' >
+            <UserSessionContext userSession={userSession}>
+                <InitContextTier 
+                    contextTiers={[initAppInfo, initI18n, initUserSession]}
+                    loadingComponent={loadingComponent} errorComponent={errorComponent}
+                    enableDebug={true}
+                    >
                     {children}
                 </InitContextTier>
             </UserSessionContext>
         </Appi18nContext>
-    </AppVersioningContext>
+    </AppInfoContext>
     );
     // #endregion Render
 }

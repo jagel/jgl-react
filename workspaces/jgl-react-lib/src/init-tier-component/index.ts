@@ -1,4 +1,6 @@
 export { default as InitContextTier } from "./init-tier.component";
+export type { InitTierContextProps } from "./init-tier.component";
+
 export  { 
     EContextService,
     EContextTierStatus,
@@ -7,7 +9,6 @@ export  {
 export type { 
     ContextTier,
     ContextTierMessage,
-    LoadingComponentProps,
-    InitTierContextProps
+    LoadingComponentProps    
 } from "./init-tier.definitions";
 export { useInitTier } from "./useInitTier";
