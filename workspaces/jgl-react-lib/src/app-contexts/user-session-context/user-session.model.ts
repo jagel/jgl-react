@@ -5,7 +5,7 @@ export interface UserProfile{
     name:string;
     email:string;
     username:string;
-    intitials:string;
+    initials:string;
 }
 
 export interface AccessData{
