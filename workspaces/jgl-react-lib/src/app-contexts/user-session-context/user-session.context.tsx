@@ -97,7 +97,7 @@ export const UserSessionContext: React.FC<UserSessionContextProps> = ({
     // #endregion render
 }
 
-const JglUserSessionContext = createContext<UserSessionContextModel>({
+export const JglUserSessionContext = createContext<UserSessionContextModel>({
     getUserProfile : () => ({} as UserProfile),
     getAccessData : () => ({} as AccessData),
     getUserPreferences : () => ({} as UserPreferences),

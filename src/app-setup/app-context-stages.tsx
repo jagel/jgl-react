@@ -1,8 +1,8 @@
 // #region Imports
 
 // React
-import React, { Suspense } from 'react';
-import { map, Observable, tap } from 'rxjs';
+import React from 'react';
+import { Observable, tap } from 'rxjs';
 
 // JGL libraries
 import { EContextService, EContextTierStatus, InitContextTier, LoadingComponentProps, TIER_MSG, useInitTier } from '@jgl-react-lib/init-tier-component';
