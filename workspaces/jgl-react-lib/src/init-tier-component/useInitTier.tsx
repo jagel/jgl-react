@@ -9,12 +9,18 @@ import { EContextService, EContextTierStatus, ContextTier, ContextTierMessage, I
 
 // #endregion Imports
 
+// #region Definitions
 export interface UseInitTierProps {
     service: EContextService;
     getData$ : () => Observable<void>;
 }
+// #endregion Definitions
 
-
+/**
+ * Hook to initialize context tiers
+ * @param contextsTiers - Array of UseInitTierProps defining the context tiers to initialize
+ * @returns A tuple containing the ContextTierMessage and InitTierInfo
+ */
 export const useInitTier = (
     contextsTiers : UseInitTierProps[]
 ) : [
