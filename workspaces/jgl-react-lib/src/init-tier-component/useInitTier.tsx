@@ -80,7 +80,7 @@ export const useInitTier = (
 
     //#region Methods
     const updateInitTier = function(tierChanged : ContextTier) {
-        const index =  contextsTiers.findIndex(x=> x.service == tierChanged.service);
+        const index =  contextsTiers.findIndex(x=> x.service === tierChanged.service);
         const isLastTier = index === (contextsTiers.length -1);
         const failed = tierChanged.status === EContextTierStatus.failed;
         
