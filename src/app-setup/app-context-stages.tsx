@@ -80,7 +80,7 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
                         name: 'test',
                         email: 'mail@test.com',
                         username: 'username_test',
-                        intitials: 'TT'
+                        initials: 'TT'
                     },
                     accessData: {
                         accessToken: '<mocked_token>',
