@@ -19,9 +19,9 @@ export interface InitTierContextProps{
 // #endregion Definitions
 
 /**
- * InitContextTier component to manage initialization tiers
- * @param props 
- * @returns 
+ * InitContextTier component to manage initialization tiers.
+ * @param props - The properties for configuring initialization tiers, loading and error components, debug mode, and children to render.
+ * @returns A React element that renders the appropriate loading, error, or child content based on initialization status.
  */
 const InitContextTier : React.FC<InitTierContextProps> = ({
     contextTiers,

@@ -36,7 +36,7 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
     const { getAppInfo } = useAppInfo(mockInitAppInfoContext, {enableLocalStorage:false, expiresInMinutes:120} );
     const userSessionWithThemeSetted = () => mockGetUser().pipe(map(usData => { 
             if(usData.isLoggedIn){
-                setMode(usData.userPreferences?.theme == 'light' ? 'light' : 'dark' );
+                setMode(usData.userPreferences?.theme === 'light' ? 'light' : 'dark' );
             }
             setUserSession(usData); 
         })
