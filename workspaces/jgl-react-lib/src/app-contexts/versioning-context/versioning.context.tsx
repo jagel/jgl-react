@@ -1,7 +1,7 @@
 // #region Imports
 // React
 import React, { createContext, useEffect, useState } from "react";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 
 // Library
 import { AppInfo, AppVersioningContextData } from "./versioning.definitions";
@@ -41,13 +41,17 @@ export const AppVersioningContext: React.FC<AppVersioningContextProps> = ({
     // #region React hooks
     useEffect(() => {
         const versioningService = contextTiers.contextsStatus.find(fi => fi.service === EContextService.appVersioningService);
-        if (versioningService?.status === EContextTierStatus.init) {
-            //onTierChange({ service: EContextService.appVersioningService, status: EContextTierStatus.loading });
+        const subs : Subscription[] = [];
+        if (versioningService?.status === EContextTierStatus.init && contextTiers.globalStatus !== EContextTierStatus.failed) {
+            onTierChange({
+                service: EContextService.appVersioningService,
+                status: EContextTierStatus.loading 
+            });
 
             const appData = tryGetLocalStorage<AppInfo>(JglConstants.localStorage.appVersion);
 
             if (appData == null) {
-                setData().subscribe({
+                const setData$ = setData().subscribe({
                     next: (versioningData) => {
                         // Set version data in Versioning context
                         setAppInfo(versioningData);
@@ -62,18 +66,30 @@ export const AppVersioningContext: React.FC<AppVersioningContextProps> = ({
                             service: EContextService.appVersioningService,
                             status: EContextTierStatus.completed
                         });
+                        console.log('App Versioning Context initialized from service');
                     },
                     error: () => {
-                        onTierChange({ service: EContextService.appVersioningService, status: EContextTierStatus.failed });
+                        onTierChange({
+                            service: EContextService.appVersioningService,
+                            status: EContextTierStatus.failed 
+                        });
+                        console.error('Failed to initialize App Versioning Context');
                     }
-                })
+                });
+                subs.push(setData$);                
             } else {
                 setAppInfoData(prev => ({
                     ...prev,
                     appInfo: appData
                 }));
-                onTierChange({ service: EContextService.appVersioningService, status: EContextTierStatus.completed });
+                onTierChange({
+                    service: EContextService.appVersioningService,
+                    status: EContextTierStatus.completed
+                });
             }
+        }
+        return () => {
+            subs.forEach(s => s.unsubscribe());
         }
     }, [contextTiers]);
     // #endregion React hooks

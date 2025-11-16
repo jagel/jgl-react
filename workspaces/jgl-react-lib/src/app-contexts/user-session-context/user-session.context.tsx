@@ -30,16 +30,27 @@ export const UserSessionContext: React.FC<UserSessionContextProps> = ({
     // #region react hooks
     useEffect(() => {
         const sessionService = contextTiers.contextsStatus.find(fi => fi.service === EContextService.sessionService);
-        if (sessionService?.status === EContextTierStatus.init) {
-            onTierChange({ service: EContextService.sessionService, status: EContextTierStatus.loading });
+        if (sessionService?.status === EContextTierStatus.init && contextTiers.globalStatus !== EContextTierStatus.failed) {
+            
+            onTierChange({
+                service: EContextService.sessionService,
+                status: EContextTierStatus.loading 
+            });
+            
             getUser().subscribe({
                 next: (response: UserSessionModel) => {
                     // Set user session data
                     setUserSession(response);
                     // Update tier status
-                    onTierChange({ service: EContextService.sessionService, status: EContextTierStatus.completed });
+                    onTierChange({
+                        service: EContextService.sessionService,
+                        status: EContextTierStatus.completed
+                    });
                 }, error: () => {
-                    onTierChange({ service: EContextService.sessionService, status: EContextTierStatus.failed });
+                    onTierChange({
+                        service: EContextService.sessionService,
+                        status: EContextTierStatus.failed
+                    });
                 },
             });
         }

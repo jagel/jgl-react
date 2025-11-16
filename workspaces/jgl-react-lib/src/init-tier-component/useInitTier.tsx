@@ -25,21 +25,22 @@ export const useInitTier = (serviceTier: Array<EContextService> = []) : [Context
     const updateInitTier = function(tierChanged : ContextTier) {
         const index =  serviceTier.findIndex(x=> x == tierChanged.service);
         const isLastTier = index === (serviceTier.length -1);
+        const failed = tierChanged.status === EContextTierStatus.failed;
         
-        const setTier = (tier: ContextTier, tierIndex:number) => {
-            // Update the tier that changed
-            if(tier.service === tierChanged.service){
+        const setTier = (tier: ContextTier, tierIndex:number) => {            
+            // Update the tier that changed or keep the same if initializing
+            if(tier.service === tierChanged.service || tierChanged.status === EContextTierStatus.init){
                 return tierChanged;
             }
             // If the previous tier is completed, set the next tier to init
-            if(tierIndex === (index + 1) && tierChanged.status === EContextTierStatus.completed){
+            if(!failed && tierIndex === (index + 1) && tierChanged.status === EContextTierStatus.completed){
                 return { ...tier, status: EContextTierStatus.init };
             }
             return tier;
         }
 
         const setGlobalSatus = () : EContextTierStatus => {
-            if(tierChanged.status === EContextTierStatus.failed){
+            if(failed){
                 return EContextTierStatus.failed;
             }
             if(isLastTier && tierChanged.status === EContextTierStatus.completed){

@@ -1,14 +1,12 @@
 // #region Imports
 
 // React
-import React from 'react';
+import React, { Suspense } from 'react';
 import { map, Observable, tap } from 'rxjs';
 
-// MUI
-import Paper from '@mui/material/Paper';
-
 // JGL libraries
-import { EContextService, InitContextTier, LoadingComponentProps, useInitTier } from '@jgl-react-lib/init-tier-component';
+import { EContextService, EContextTierStatus, InitContextTier, LoadingComponentProps, TIER_MSG, useInitTier } from '@jgl-react-lib/init-tier-component';
+import { LoadingPage, ErrorPage } from '@jgl-mui/pages';
 import { AppInfo, AppVersioningContext } from '@jgl-react-lib/app-contexts/versioning-context';
 import { Appi18nContext, I18nCatalog } from '@jgl-react-lib/app-contexts/i18n-context';
 
@@ -59,9 +57,8 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
                         healthySecurityService: true,
                         healthyApiService: true
                     });
-                // subscriber.error('Mock initialization failed');
                 subscriber.complete();
-            }, 300)
+            }, 1000)
         });
 
      const mockInitI18nCatalogContext = () : Observable<Array<I18nCatalog>> => 
@@ -72,7 +69,7 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
                     {language: 'en', key: 'create', value: 'Create'}, {language: 'es', key: 'create', value: 'Crear'}
                 ]);
                 subscriber.complete();
-            }, 300)
+            }, 1000)
         });
 
      const mockGetUser = () : Observable<UserSessionModel> => 
@@ -95,7 +92,7 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
                         roleAccess: ['read', 'write'],
                     },
                     userPreferences:{
-                        theme: 'dark',
+                        theme: 'light',
                         timeZone: 'GMT-MOCK',
                         language: 'en',
                         apiCode: 'v1',
@@ -104,7 +101,7 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
                     isLoggedIn: true
                 });
                 subscriber.complete();
-            }, 300)
+            }, 5000)
         }).pipe(tap(data => {
             if(data.isLoggedIn){
                 const mode = data.userPreferences?.theme ?? 'light'; 
@@ -114,15 +111,23 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
     // #endregion Methods
     
     // #region Render
-    const loadingComponent: React.FC<LoadingComponentProps> = ({ percentageCompleted }) => (
-        <Paper style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div>Loading... {percentageCompleted.toFixed(0)}%</div>
-        </Paper>
+    const loadingComponent: React.FC<LoadingComponentProps> = ({ contextTier, percentageCompleted }) => (
+        <LoadingPage 
+            percentageCompleted={percentageCompleted}
+            title="Initializing Application"
+            currentOperation={TIER_MSG.service(contextTier.contextsStatus.find(ctier => [EContextTierStatus.init, EContextTierStatus.loading].some(status => status === ctier.status)  )?.service ?? EContextService.i18nService)}
+            showPercentage={true}
+            minHeight="100vh"
+        />
     );
     const errorComponent: React.FC<LoadingComponentProps> = () => (
-        <Paper style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <p>Error during initialization. Please try again later. </p>
-        </Paper>
+        <ErrorPage 
+            title="Initialization Failed"
+            message="We encountered an error while setting up the application."
+            details="The application failed to initialize properly. This could be due to a network issue or a temporary service problem."
+            minHeight="100vh"
+            showActions={false}
+        />
     );
 
     

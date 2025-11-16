@@ -42,8 +42,10 @@ export const Appi18nContext : React.FC<Appi18nContextProps> = ({
 	useEffect(() => {
 		const i18Service = contextTiers.contextsStatus.find(fi => fi.service === EContextService.i18nService);
 		
-		if (i18Service?.status === EContextTierStatus.init) {				
+		if (i18Service?.status === EContextTierStatus.init && contextTiers.globalStatus !== EContextTierStatus.failed) {				
 			const languagePersisted = localStorage.getItem(LANGUAGE.KEY) as LanguageType | null;
+
+			onTierChange({ service: EContextService.i18nService, status: EContextTierStatus.loading });
 
 			if (!languagePersisted) {
 				localStorage.setItem(LANGUAGE.KEY, language);
@@ -56,10 +58,16 @@ export const Appi18nContext : React.FC<Appi18nContextProps> = ({
 					// Set i18n catalog
 					setI18nCatalog(i18ncatalog);
 					// Update tier status
-					onTierChange({ service: EContextService.i18nService, status: EContextTierStatus.completed });
+					onTierChange({
+						service: EContextService.i18nService,
+						status: EContextTierStatus.completed 
+					});
 				}, error: () => {
 					// Update tier status
-					onTierChange({ service: EContextService.i18nService, status: EContextTierStatus.failed });
+					onTierChange({
+						service: EContextService.i18nService,
+						status: EContextTierStatus.failed 
+					});
 				}
 			});
 		}				
