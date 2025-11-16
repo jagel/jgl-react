@@ -9,9 +9,10 @@ import { JglConstants } from "../../definitions";
 // #endregion Imports
 
 /**
- * useAppInfo hook to manage application information
- * @param props 
- * @returns 
+ * useAppInfo hook to manage application information.
+ * @param getAppInfo - Function that returns an Observable emitting AppInfo data.
+ * @param defaults - Optional settings for local storage and expiration.
+ * @returns An object containing the getAppInfo method to retrieve application information.
  */
 export const useAppInfo = (
     getAppInfo: () => Observable<AppInfo>,
