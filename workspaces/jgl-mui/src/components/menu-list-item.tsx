@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 
 
 // Add this interface above the MenuListItem
-interface StyledMenuListItemProps {
+export interface StyledMenuListItemProps {
     isActive?: boolean;
 }
 

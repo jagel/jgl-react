@@ -28,7 +28,7 @@ export interface TableHeaderProps extends JglHeaderProps{
 //#endregion Props
 
 	
-export const JglTableHeader = forwardRef<
+const JglTableHeader = forwardRef<
 	{ reset: () => void },
 	{
 		sort: TableSort;

@@ -27,7 +27,7 @@ export interface JGLTablePaginationProps {
  *	    onPageChange={(page, rowsPerPage) => onPageChange(page, rowsPerPage)}
  *	/>
  */
-export const JGLTablePagination = ({
+const JGLTablePagination = ({
     totalRows,
     rowsPerPageOptions,
     page,
@@ -58,3 +58,5 @@ export const JGLTablePagination = ({
     />
     //#endregion Render
 }
+
+export default JGLTablePagination;
