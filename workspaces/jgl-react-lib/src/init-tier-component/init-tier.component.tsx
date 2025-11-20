@@ -3,7 +3,7 @@
 // JGL Library
 import React from "react";
 import { EContextTierStatus, LoadingComponentProps, TIER_MSG } from "./init-tier.definitions";
-import { useInitTier, UseInitTierProps } from "./useInitTier";
+import useInitTier, { UseInitTierProps } from "./useInitTier";
 import DebuggerConsole from "../helper-pages/debugger-console.component";
 // #endregion Imports
 

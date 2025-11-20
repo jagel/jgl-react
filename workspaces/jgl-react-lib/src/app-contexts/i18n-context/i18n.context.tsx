@@ -66,7 +66,7 @@ export const Appi18nContext : React.FC<Appi18nContextProps> = ({
 	// #endregion render
 }
 
-const JglI18nContext = createContext<I18nContext>({
+export const JglI18nContext = createContext<I18nContext>({
 	language : 'en',
 	i18nCatalog : [],
 	setLanguage: () => {},

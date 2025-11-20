@@ -14,7 +14,7 @@ import { JglConstants } from "../../definitions";
  * @param defaults - Optional settings for local storage and expiration.
  * @returns An object containing the getAppInfo method to retrieve application information.
  */
-export const useAppInfo = (
+const useAppInfo = (
     getAppInfo: () => Observable<AppInfo>,
     defaults? : {
         enableLocalStorage?:boolean,
@@ -51,3 +51,5 @@ export const useAppInfo = (
 
     return { getAppInfo: getAppInfoSub };
 }
+
+export default useAppInfo;

@@ -1,5 +1,5 @@
 {
-  "name": "jgl-ui-lib",
+  "name": "jgl-react-lib",
   "version": "0.0.1",
   "type": "module",
   "description": "Jagel React Library",
@@ -9,6 +9,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*/index.d.ts",
+      "import": "./dist/*/index.js"
     }
   },
   "files": [

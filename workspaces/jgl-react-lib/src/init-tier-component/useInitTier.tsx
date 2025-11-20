@@ -21,7 +21,7 @@ export interface UseInitTierProps {
  * @param contextsTiers - Array of UseInitTierProps defining the context tiers to initialize
  * @returns A tuple containing the ContextTierMessage and InitTierInfo
  */
-export const useInitTier = (
+const useInitTier = (
     contextsTiers : UseInitTierProps[]
 ) : [
     ContextTierMessage,
@@ -119,5 +119,4 @@ export const useInitTier = (
     return [initTier,tierInfo];
 }
 
-
-
+export default useInitTier;
