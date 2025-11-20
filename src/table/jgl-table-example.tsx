@@ -14,18 +14,18 @@ import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 
 // JGL Library
-import { JglTableHeader } from "@jgl-mui/table/jgl-table-header";
-import { tblSvc } from "@jgl-ui-lib/services/table.service";
-import type { TableCustomSort, TableSort } from "@jgl-mui/table/jgl-header.models";
-import { useTableEvents } from "@jgl-mui/table/jgl-table.hook";
+import JglTableHeader from "@jgl-mui/table/jgl-table-header";
+import useTableEvents from "@jgl-mui/table/jgl-table.hook";
+import JGLTablePagination from "@jgl-mui/table/jgl-table.pagination";
 import SearchInput from "@jgl-mui/table/jgl-table-search.input";
 import { JGL_STYLE_Table_Toolbar } from "@jgl-mui/table/jgl-table-defaults";
+import { tblSvc } from "@jgl-ui-lib/services/table.service";
+import type { TableCustomSort, TableSort } from "@jgl-mui/table/jgl-header.models";
 
 // Internal references
 import type { ITableModel } from "./jgl-table.model";
 import { dataCreator } from "./jgl-table.service";
 import { TblMtd } from "./jgl-table.definitions";
-import { JGLTablePagination } from "@jgl-mui/table/jgl-table.pagination";
 import Typography from "@mui/material/Typography";
 
 // #endregion Imports
