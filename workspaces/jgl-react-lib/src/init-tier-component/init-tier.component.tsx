@@ -43,6 +43,7 @@ const InitContextTier : React.FC<InitTierContextProps> = ({
     };
 
     switch(initTier.globalStatus){
+        // Loading  cases
         case EContextTierStatus.queued:
         case EContextTierStatus.init:
         case EContextTierStatus.loading:
@@ -52,8 +53,12 @@ const InitContextTier : React.FC<InitTierContextProps> = ({
                     {loadingContent}
                 </DebuggerConsole>
             ) : loadingContent;
+        
+        // Completed case
         case EContextTierStatus.completed:
             return children;
+
+        // Failed case
         case EContextTierStatus.failed:
             const errorContent = errorComponent({contextTier: initTier, tierInfo: appInfo}) as React.ReactNode;
             return enableDebug ? (
@@ -61,6 +66,8 @@ const InitContextTier : React.FC<InitTierContextProps> = ({
                     {errorContent}
                 </DebuggerConsole>
             ) : errorContent;
+
+        // Unknown case
         default:
             const defaultErrorContent = errorComponent({contextTier: initTier, tierInfo: appInfo}) as React.ReactNode;
             return enableDebug ? (
