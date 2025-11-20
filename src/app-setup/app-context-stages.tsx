@@ -8,8 +8,10 @@ import { map } from 'rxjs';
 import { useColorScheme } from '@mui/material';
 
 // JGL libraries
+import ErrorPage from '@jgl-mui/pages/error-page';
+import LoadingPage from '@jgl-mui/pages/loading-page';
+
 import { EContextService, EContextTierStatus, InitContextTier, LoadingComponentProps, TIER_MSG } from '@jgl-react-lib/init-tier-component';
-import { LoadingPage, ErrorPage } from '@jgl-mui/pages';
 import { AppInfo, AppInfoContext, useAppInfo } from '@jgl-react-lib/app-contexts/app-info-context';
 import { Appi18nContext, I18nCatalog } from '@jgl-react-lib/app-contexts/i18n-context';
 import { UserSessionContext, UserSessionModel } from '@jgl-react-lib/app-contexts';
@@ -17,6 +19,8 @@ import { UseInitTierProps } from '@jgl-react-lib/init-tier-component/useInitTier
 
 // App imports
 import { useGetInitializers } from '../hooks/get-initializers.api';
+import { I18nText } from '@jgl-react-lib/i18ns';
+import { DebuggerConsole } from '@jgl-mui/components';
 
 // #endregion Imports
 
@@ -55,33 +59,50 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
     const loadingComponent: React.FC<LoadingComponentProps> = ({ contextTier, tierInfo }) => (
         <LoadingPage 
             percentageCompleted={tierInfo.loadingPercentage}
-            title="Initializing Application"
-            currentOperation={TIER_MSG.service(contextTier.contextsStatus.find(ctier => [EContextTierStatus.init, EContextTierStatus.loading].some(status => status === ctier.status)  )?.service ?? EContextService.i18nService)}
+            title={I18nText({textKey: 'app.init.loading.title', defaultText:'Application is starting up...'})}
+            currentOperation={
+                TIER_MSG.service(
+                    contextTier.contextsStatus
+                        .find(ctier => [EContextTierStatus.init, EContextTierStatus.loading]
+                        .some(status => status === ctier.status)  )?.service ?? EContextService.i18nService
+                    )}
             showPercentage={true}
             minHeight="100vh"
         />
     );
     const errorComponent: React.FC<LoadingComponentProps> = () => (
         <ErrorPage 
-            title="Initialization Failed"
-            message="We encountered an error while setting up the application."
-            details="The application failed to initialize properly. This could be due to a network issue or a temporary service problem."
+            title={I18nText({textKey: 'app.init.error.title', defaultText:'Application Initialization Error'})}
+            message={I18nText({textKey: 'app.init.error.message', defaultText:'We encountered an error while setting up the application.'})}
+            details={I18nText({textKey: 'app.init.error.details', defaultText:'Please try refreshing the page or contact support if the issue persists.'})}
             minHeight="100vh"
             showActions={false}
         />
     );
+
+    // const debugger = () => 
+        // // Prepare debug data for the DebuggerConsole
+        // const debugData = {
+        //     globalStatus: TIER_MSG.status(initTier.globalStatus),
+        //     contextStatus: initTier.contextsStatus.map(ctier => ({ 
+        //         service: TIER_MSG.service(ctier.service), 
+        //         status: TIER_MSG.status(ctier.status) 
+        //     })),
+        // };
+    
     
     return (
     <AppInfoContext appInfo={appInfo} >
-        <Appi18nContext i18nCatalog={i18nCatalog} defaultLanguage='en' >
+        <Appi18nContext i18nCatalog={i18nCatalog} defaultLanguage='en' showWarning={true}>
             <UserSessionContext userSession={userSession}>
                 <InitContextTier 
                     contextTiers={[initAppInfo, initI18n, initUserSession]}
                     loadingComponent={loadingComponent}
                     errorComponent={errorComponent}
-                    enableDebug={true}
                     >
-                    {children}
+                    <DebuggerConsole debugData={{appInfo, i18nCatalog, userSession}} section="AppContextStages">
+                        {children}
+                    </DebuggerConsole>
                 </InitContextTier>
             </UserSessionContext>
         </Appi18nContext>
@@ -89,4 +110,3 @@ export const AppContextStages = ({children} : React.PropsWithChildren) => {
     );
     // #endregion Render
 }
-

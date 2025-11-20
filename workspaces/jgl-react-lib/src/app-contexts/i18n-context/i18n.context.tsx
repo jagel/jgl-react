@@ -11,6 +11,7 @@ import { LANGUAGE, LanguageType } from "./i18n.definitions";
 export interface Appi18nContextProps {
 	i18nCatalog: Array<I18nCatalog>;
 	defaultLanguage?: LanguageType;
+	showWarning?: boolean;
 	children: any;
 }
 // #endregion definitions
@@ -24,6 +25,7 @@ export interface Appi18nContextProps {
 export const Appi18nContext : React.FC<Appi18nContextProps> = ({
 	i18nCatalog,
 	children,
+	showWarning = false,
 	defaultLanguage = 'en'
 }) => {
 	// #region Definitions
@@ -58,8 +60,9 @@ export const Appi18nContext : React.FC<Appi18nContextProps> = ({
 	return <JglI18nContext.Provider value={{
 		language,
 		i18nCatalog,
+		showWarning,
 		setLanguage: (language: LanguageType) => persistLanguage(language),
-		geti18nText: (textKey: string) => geti18nText(textKey)
+		geti18nText: (textKey: string) => geti18nText(textKey),
 	}}>
 		{children}
 	</JglI18nContext.Provider>
@@ -69,6 +72,7 @@ export const Appi18nContext : React.FC<Appi18nContextProps> = ({
 export const JglI18nContext = createContext<I18nContext>({
 	language : 'en',
 	i18nCatalog : [],
+	showWarning: false,
 	setLanguage: () => {},
-	geti18nText: () => 'unknown'
+	geti18nText: () => 'unknown',
 });
