@@ -36,7 +36,7 @@ export interface TableProperties<T extends Object> {
  * const [tblProps, onSortChange, onPageChange, onSearch] = useTableEvents<ITableModel>(10,tblDefaults);
  * ```
  */
-export const useTableEvents =<T extends Object,>(
+const useTableEvents =<T extends Object,>(
 	rowPerPage: number,
 	header: JglHeaderProps) : [
 	TableProperties<T>,
@@ -73,3 +73,5 @@ export const useTableEvents =<T extends Object,>(
 
 	return [tableProperties, onSortChange, onPageChange, onSearch];
 }
+
+export default useTableEvents;

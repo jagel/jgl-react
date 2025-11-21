@@ -1,5 +1,5 @@
 {
-  "name": "jgl-ui-lib",
+  "name": "jgl-react-lib",
   "version": "0.0.1",
   "type": "module",
   "description": "Jagel React Library",
@@ -9,6 +9,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*/index.d.ts",
+      "import": "./dist/*/index.js"
     }
   },
   "files": [
@@ -18,7 +22,8 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [
     "typescript",
@@ -33,17 +38,21 @@
     "url": "your-repo-url-here"
   },
   "peerDependencies": {
-    "react": "^19.1.1"
+    "@reduxjs/toolkit": "^2.10.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.9.6",
+    "rxjs": "^7.8.2",
+    "axios": "^1.13.2"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.10.1",
-    "axios": "^1.13.2",
-    "react-redux": "^9.2.0",
-    "rxjs": "^7.8.2"
   },
   "devDependencies": {
-    "@types/react": "^18.0.0",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
     "@types/react-redux": "^7.1.34",
-    "typescript": "^5.0.0"
+    "typescript": "5.9.3",
+    "vite": "^7.2.4"
   }
 }

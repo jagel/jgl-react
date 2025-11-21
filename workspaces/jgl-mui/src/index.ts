@@ -1,11 +1,12 @@
 // Main entry point for the jgl-mui library
 // Export your components here
 
-// Example:
-// export { default as JglTable } from './components/JglTable';
-// export type { JglTableProps } from './components/JglTable';
+// Components
+export * from './components/index';
 
-// TODO: Add your actual component exports here
-
-export * from './table/index';
+// Pages components and types
 export * from './pages/index';
+
+// Table components and types
+export * from './table/index';
+

@@ -1,16 +1,19 @@
+// #region Imports
+// React
 import React from 'react';
-import {
-    Box,
-    Paper,
-    Typography,
-    Stack,
-    useTheme,
-    alpha,
-    Button,
-    Divider
-} from '@mui/material';
+
+// MUI
 import Icon from '@mdi/react';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+import { useTheme, alpha } from '@mui/material/styles';
 import { mdiAlertCircle, mdiRefresh, mdiHome } from '@mdi/js';
+
+// #endregion Imports
 
 export interface ErrorPageProps {
     /** Error title */
@@ -33,7 +36,7 @@ export interface ErrorPageProps {
     homeText?: string;
 }
 
-export const ErrorPage: React.FC<ErrorPageProps> = ({
+const ErrorPage: React.FC<ErrorPageProps> = ({
     title = 'Initialization Error',
     message = 'Something went wrong during the initialization process.',
     details = 'Please try refreshing the page or contact support if the problem persists.',

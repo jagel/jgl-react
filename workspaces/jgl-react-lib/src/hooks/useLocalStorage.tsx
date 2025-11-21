@@ -1,7 +1,7 @@
 import { LocalStorage } from "../models/localStorage.models";
 
 // Define a custom hook type similar to React.FC
-type UseLocalStorageHook = () => {
+export type UseLocalStorageHook = () => {
     setOrUpdateLocalStorage: <T>(key: string, data: T, expiresInMinutes?: number) => void,
     tryGetLocalStorage: <T>(key: string) => T | null
 };

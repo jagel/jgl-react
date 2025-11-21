@@ -1,7 +1,6 @@
-export interface HealthCheck{
-    status : string;
-    totalDuration: Date;
-    checks: Array<HealthCheckItem>;
+export interface HealthCheckData {
+    description:string;
+    details:string;
 }
 
 export interface HealthCheckItem{
@@ -15,7 +14,9 @@ export interface HealthCheckItem{
     tags: Array<string>
 }
 
-export interface HealthCheckData {
-    description:string;
-    details:string;
+export interface HealthCheck{
+    status : string;
+    totalDuration: Date;
+    checks: Array<HealthCheckItem>;
 }
+

@@ -5,7 +5,7 @@ export interface useHttpGetRequestProps<T> {
     request$: () => Observable<T>;
     behaivourLevel: 'content' | 'page';
 }
-export const useHttpGetRequest = <T,>({ request$ }: useHttpGetRequestProps<T>) => {
+const useHttpGetRequest = <T,>({ request$ }: useHttpGetRequestProps<T>) => {
     const [responseData, setResponseData] = useState<T | null>();
 
     useEffect(() => {
@@ -22,3 +22,5 @@ export const useHttpGetRequest = <T,>({ request$ }: useHttpGetRequestProps<T>) =
 
     return responseData;
 }
+
+export default useHttpGetRequest;
