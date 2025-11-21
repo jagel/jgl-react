@@ -1,6 +1,7 @@
 export interface IJglForm<T>{
     isValid:boolean;
     hasChanges:boolean;
+    errors?:Array<IErrorResult<T>>;
     data:T;
 }
 
@@ -10,6 +11,13 @@ export interface IValidatorDef {
 }
 
 export interface IValidator<T> extends IValidatorDef {
-    event: (data: T) => boolean;
+    isValidFn: (data: T) => boolean;
     field: keyof T;
+}
+
+
+export interface IErrorResult<T>{
+    fieldName: keyof T;
+    errorCode: string;
+    args?: Array<string>;
 }
