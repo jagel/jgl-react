@@ -69,7 +69,7 @@ class JGLForm<T> {
     setFormData(data: T): IJglForm<T> {
         const isValid = this.isDataValid(data);
         const hasChanges = this.setHasChanges(data);
-        return { isValid, hasChanges, data } as IJglForm<T>;
+        return { isValid, hasChanges, data };
     }
 
     /**
