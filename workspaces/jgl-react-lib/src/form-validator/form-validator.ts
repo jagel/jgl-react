@@ -8,7 +8,7 @@ import { IJglForm, IValidator, IValidatorDef } from "./form-validator.definition
 /**
  * JGLForm class to manage form state and validation
  */
-class JGLForm<T> {
+export class JGLForm<T> {
     // Store the initial state of the form data as a JSON string
     initial: string;
 
@@ -90,11 +90,4 @@ class JGLForm<T> {
         // Compare current data with initial data pristine state
         return JSON.stringify(data) !== this.initial;
     }
-}
-
-/**
- * JglForm factory object to create JGLForm instances
- */
-export const JglForm = {
-    createForm : <T>(initialData:T) : JGLForm<T> => new JGLForm<T>(initialData)
 }
