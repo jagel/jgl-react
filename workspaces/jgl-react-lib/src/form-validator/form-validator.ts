@@ -56,7 +56,7 @@ class JGLForm<T> {
      * const errors = form.getErrors('email', formData);
      */
     getErrors(key: keyof T, data: T): Array<IValidatorDef> {
-        return this.validators.filter(v => v.field === key && !v.event(data)).map(v => ({ errorCode: v.errorCode, args: v.args })) ?? [];
+        return this.validators.filter(v => v.field === key && !v.event(data)).map(v => ({ errorCode: v.errorCode, args: v.args }));
     }
 
     /**
