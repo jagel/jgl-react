@@ -74,7 +74,7 @@ class JGLForm<T> {
 
     /**
      * Update initial data state
-     * @param data intial data to set
+     * @param data initial data to set
      * @example
      * form.updateInitialData(formData);
      */
