@@ -121,7 +121,7 @@ function deepEqual(obj1: unknown, obj2: unknown, visited = new WeakMap<object, o
  * Uses deep equality comparison for change detection, which properly handles
  * functions, dates, undefined values, and circular references.
  */
-class JGLForm<T> {
+export class JGLForm<T> {
     // Store the initial state of the form data
     initial: T;
 
@@ -170,7 +170,7 @@ class JGLForm<T> {
      * const errors = form.getErrors('email', formData);
      */
     getErrors(key: keyof T, data: T): Array<IValidatorDef> {
-        return this.validators.filter(v => v.field === key && !v.event(data)).map(v => ({ errorCode: v.errorCode, args: v.args })) ?? [];
+        return this.validators.filter(v => v.field === key && !v.event(data)).map(v => ({ errorCode: v.errorCode, args: v.args }));
     }
 
     /**
@@ -183,7 +183,7 @@ class JGLForm<T> {
     setFormData(data: T): IJglForm<T> {
         const isValid = this.isDataValid(data);
         const hasChanges = this.setHasChanges(data);
-        return { isValid, hasChanges, data } as IJglForm<T>;
+        return { isValid, hasChanges, data };
     }
 
     /**
@@ -205,11 +205,4 @@ class JGLForm<T> {
         // This properly handles dates, functions, undefined values, and circular references
         return !deepEqual(data, this.initial);
     }
-}
-
-/**
- * JglForm factory object to create JGLForm instances
- */
-export const JglForm = {
-    createForm : <T>(initialData:T) : JGLForm<T> => new JGLForm<T>(initialData)
 }
