@@ -29,11 +29,11 @@ export const I18nText = ({ textKey, defaultText, params }: I18nTextProps) => {
 
     // Validation flow
     if (i18nValue == null) {
-        if (showWarning) console.warn("Translation not found or declare multiple times, using code sended", 'useI18n', { code: textKey, language })
+        if (showWarning) console.warn("Translation not found or declared multiple times, using code sent", 'useI18n', { code: textKey, language })
         return defaultText ?? textKey;
     }
 
-    // Replace params if any token exit
+    // Replace params if any token exits
     const textValue = params?.reduce((
         accumulator,
         currentValue,
