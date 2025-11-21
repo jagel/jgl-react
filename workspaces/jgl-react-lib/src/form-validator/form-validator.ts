@@ -1,22 +1,27 @@
 // #region Imports
 
 // Import necessary interfaces
-import { IErrorResult, IJglForm, IValidator } from "./form-validator.definitions";
+import { deepClone, deepEqual } from "./deep-clone";
+import { IJglForm, IValidator, IValidatorDef } from "./form-validator.definitions";
 
 // #endregion
 
+
 /**
- * JGLForm class to manage form state and validation
+ * JGLForm class to manage form state and validation.
+ * Uses deep equality comparison for change detection, which properly handles
+ * functions, dates, undefined values, and circular references.
  */
 export class JGLForm<T> {
-    // Store the initial state of the form data as a JSON string
-    initial: string;
+    // Store the initial state of the form data
+    initial: T;
 
     private validators: Array<IValidator<T>> = [];
 
-    constructor(data: T) {
-        // decouple and store the initial data state
-        this.initial = JSON.stringify(data);
+    constructor(data:T){
+        // Store a deep copy of the initial data state
+        // This preserves dates, undefined values, and handles circular references
+        this.initial = deepClone(data);
     }
 
     /**
@@ -100,12 +105,13 @@ export class JGLForm<T> {
      * @example
      * form.updateInitialData(formData);
      */
-    updateInitialData(data: T): void {
-        this.initial = JSON.stringify(data);
+    updateInitialData(data:T): void {
+        this.initial = deepClone(data);
     }
 
-    private setHasChanges(data: T): boolean {
-        // Compare current data with initial data pristine state
-        return JSON.stringify(data) !== this.initial;
+    private setHasChanges(data:T): boolean {
+        // Use deep equality comparison to detect changes
+        // This properly handles dates, functions, undefined values, and circular references
+        return !deepEqual(data, this.initial);
     }
 }
