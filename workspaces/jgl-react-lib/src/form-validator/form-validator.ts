@@ -1,7 +1,7 @@
 // #region Imports
 
 // Import necessary interfaces
-import { IJglForm, IValidator, IValidatorDef } from "./form-validator.definitions";
+import { IErrorResult, IJglForm, IValidator } from "./form-validator.definitions";
 
 // #endregion
 
@@ -14,7 +14,7 @@ export class JGLForm<T> {
 
     private validators: Array<IValidator<T>> = [];
 
-    constructor(data:T){
+    constructor(data: T) {
         // decouple and store the initial data state
         this.initial = JSON.stringify(data);
     }
@@ -37,12 +37,12 @@ export class JGLForm<T> {
         validatorFn: (data: T) => boolean,
         errorCode: string,
         field: keyof T,
-        args: Array<string> | undefined = undefined) : void {
+        args: Array<string> | undefined = undefined): void {
 
         if (this.validators.find(x => x.errorCode === errorCode && x.field === field)) {
             throw new Error(`Validator with error code ${errorCode} already exists`);
         }
-        const validator: IValidator<T> = { event: validatorFn, errorCode, field, args };
+        const validator: IValidator<T> = { isValidFn: validatorFn, errorCode, field, args };
 
         this.validators = [...this.validators, validator];
     }
@@ -55,8 +55,24 @@ export class JGLForm<T> {
      * @example
      * const errors = form.getErrors('email', formData);
      */
-    getErrors(key: keyof T, data: T): Array<IValidatorDef> {
-        return this.validators.filter(v => v.field === key && !v.event(data)).map(v => ({ errorCode: v.errorCode, args: v.args }));
+    getErrorsByField(key: keyof T, data: T): Array<IErrorResult<T>> {
+        return this.validators
+            .filter(v => v.field === key && !v.isValidFn(data)).map(v => ({ errorCode: v.errorCode, args: v.args }))
+            .map(v => ({ fieldName: key, errorCode: v.errorCode, args: v.args }) as IErrorResult<T>);
+    }
+
+    /**
+     * Get validation errors for a specific field
+     * @param key Field key to get errors for
+     * @param data Current form data
+     * @returns Array of validator definitions representing the errors
+     * @example
+     * const errors = form.getErrors('email', formData);
+     */
+    getErrors(data: T): Array<IErrorResult<T>> {
+        return this.validators
+            .filter(v => !v.isValidFn(data))
+            .map(v => ({ errorCode: v.errorCode, args: v.args }) as IErrorResult<T>)
     }
 
     /**
@@ -67,9 +83,15 @@ export class JGLForm<T> {
      * const formState = form.setFormData(formData);
      */
     setFormData(data: T): IJglForm<T> {
-        const isValid = this.isDataValid(data);
+        const errors = this.getErrors(data);
         const hasChanges = this.setHasChanges(data);
-        return { isValid, hasChanges, data };
+
+        return { 
+            isValid: errors.length > 0,
+            hasChanges,
+            errors,
+            data
+        };
     }
 
     /**
@@ -78,15 +100,11 @@ export class JGLForm<T> {
      * @example
      * form.updateInitialData(formData);
      */
-    updateInitialData(data:T): void {
+    updateInitialData(data: T): void {
         this.initial = JSON.stringify(data);
     }
 
-    private isDataValid(data:T): boolean {
-        return this.validators.every(v => v.event(data));
-    }
-
-    private setHasChanges(data:T): boolean {
+    private setHasChanges(data: T): boolean {
         // Compare current data with initial data pristine state
         return JSON.stringify(data) !== this.initial;
     }
