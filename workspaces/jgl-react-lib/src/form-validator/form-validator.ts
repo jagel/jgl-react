@@ -2,7 +2,7 @@
 
 // Import necessary interfaces
 import { deepClone, deepEqual } from "./deep-clone";
-import { IJglForm, IValidator, IValidatorDef } from "./form-validator.definitions";
+import { IErrorResult, IJglForm, IValidator } from "./form-validator.definitions";
 
 // #endregion
 
@@ -95,7 +95,7 @@ export class JGLForm<T> {
             isValid: errors.length > 0,
             hasChanges,
             errors,
-            data
+            data : deepClone(data)
         };
     }
 
