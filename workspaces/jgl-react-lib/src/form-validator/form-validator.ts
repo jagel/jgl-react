@@ -15,7 +15,7 @@ class JGLForm<T> {
     private validators: Array<IValidator<T>> = [];
 
     constructor(data:T){
-        // deacouple and store the initial data state
+        // decouple and store the initial data state
         this.initial = JSON.stringify(data);
     }
 
