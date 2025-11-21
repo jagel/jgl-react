@@ -38,7 +38,7 @@ export const I18nText = ({ textKey, defaultText, params }: I18nTextProps) => {
         accumulator,
         currentValue,
         index) => accumulator.replace(`{${index}}`, currentValue),
-    i18nValue ?? '');
+    i18nValue ?? '') ?? i18nValue;
 
     // Return the final text value
     return textValue;

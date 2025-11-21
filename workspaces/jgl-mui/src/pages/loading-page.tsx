@@ -23,7 +23,7 @@ export interface LoadingPageProps {
     minHeight?: string | number;
 }
 
-export const LoadingPage: React.FC<LoadingPageProps> = ({
+const LoadingPage: React.FC<LoadingPageProps> = ({
     percentageCompleted,
     currentOperation = 'Initializing...',
     title = 'Loading',
@@ -184,4 +184,4 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({
     );
 };
 
-export default LoadingPage;
+export default LoadingPage

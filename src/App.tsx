@@ -1,11 +1,11 @@
 // #region Imports
 import { lazy, useMemo } from 'react';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
 import { theme } from './styles/theme';
 
 // MUI
 import Paper from '@mui/material/Paper';
+import { ThemeProvider } from '@mui/material/styles';
 
 // Internal modules and components
 import { authRoutes } from './app-setup/app-routing';
@@ -58,8 +58,11 @@ function App() {
     const router = useMemo(() => createBrowserRouter(routes), [routes]);
 
     //#endregion Initializations
+
+    // TODO: Move ``theme`` definition to libray jgl-mui/src/theme/theme-provider.tsx, and rename it to jglThemePalette
+    // TODO: Create Footer in library jgl-mui/src/layouts/footer.component.tsx
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}> 
             <AppContextStages>
                 <Paper style={{ minHeight: '100vh' }}>
                     <RouterProvider router={router} />

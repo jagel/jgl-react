@@ -22,7 +22,8 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "type-check": "tsc --noEmit"
   },
   "keywords": ["typescript", "standards", "utility", "framework-agnostic"],
   "author": "Jagel",
