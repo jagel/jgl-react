@@ -13,5 +13,3 @@ export interface IValidator<T> extends IValidatorDef {
     event: (data: T) => boolean;
     field: keyof T;
 }
-
-
