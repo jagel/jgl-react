@@ -1,9 +1,3 @@
-export type  {
-    HealthCheck,
-    HealthCheckItem,
-    HealthCheckData
-}  from "./health-check.model";
-    
 export type { LocalStorage } from "./localStorage.models";
 
 export type { IMetadataPage } from "./metadata-pages";
