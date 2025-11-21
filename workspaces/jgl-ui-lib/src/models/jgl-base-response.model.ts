@@ -1,15 +1,15 @@
 import { JglErrorResponse } from "./jgl-error-response.model";
 
-export interface JGLBaseReponse  {
+export interface JGLBaseResponse  {
     hasErrors:boolean;
     errorResponse?:JglErrorResponse;
-    statusCodeReponse?: number;    
+    statusCodeResponse?: number;    
 }
 
-export interface JGLModelResponse<TModelResponse> extends  JGLBaseReponse {
+export interface JGLModelResponse<TModelResponse> extends  JGLBaseResponse {
     data : TModelResponse | null;
 }
 
-export interface JGLBooleanResponse extends JGLBaseReponse{
+export interface JGLBooleanResponse extends JGLBaseResponse{
     transactionCompleted : boolean;
 }
