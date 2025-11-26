@@ -92,7 +92,7 @@ export class JGLForm<T> {
         const hasChanges = this.setHasChanges(data);
 
         return { 
-            isValid: errors.length > 0,
+            isValid: errors.length === 0,
             hasChanges,
             errors,
             data : deepClone(data)
