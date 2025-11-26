@@ -67,12 +67,11 @@ export class JGLForm<T> {
     }
 
     /**
-     * Get validation errors for a specific field
-     * @param key Field key to get errors for
+     * Get validation errors for all fields.
      * @param data Current form data
-     * @returns Array of validator definitions representing the errors
+     * @returns Array of validator definitions representing the errors for all fields
      * @example
-     * const errors = form.getErrors('email', formData);
+     * const errors = form.getErrors(formData);
      */
     getErrors(data: T): Array<IErrorResult<T>> {
         return this.validators
