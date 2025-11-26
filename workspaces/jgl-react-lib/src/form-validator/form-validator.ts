@@ -76,7 +76,7 @@ export class JGLForm<T> {
     getErrors(data: T): Array<IErrorResult<T>> {
         return this.validators
             .filter(v => !v.isValidFn(data))
-            .map(v => ({ errorCode: v.errorCode, args: v.args }) as IErrorResult<T>)
+            .map(v => ({ fieldName: v.field, errorCode: v.errorCode, args: v.args }) as IErrorResult<T>)
     }
 
     /**
