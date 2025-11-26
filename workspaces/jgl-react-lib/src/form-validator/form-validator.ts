@@ -93,7 +93,6 @@ export class JGLForm<T> {
         return { 
             isValid: errors.length === 0,
             hasChanges,
-            errors,
             data : deepClone(data)
         };
     }

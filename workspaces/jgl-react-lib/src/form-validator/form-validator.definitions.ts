@@ -1,7 +1,6 @@
 export interface IJglForm<T>{
     isValid:boolean;
     hasChanges:boolean;
-    errors?:Array<IErrorResult<T>>;
     data:T;
 }
 
