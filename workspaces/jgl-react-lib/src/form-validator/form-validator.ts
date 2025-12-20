@@ -1,9 +1,7 @@
 // #region Imports
 
 // Import necessary interfaces
-import { deepClone, deepEqual } from "./deep-clone";
-import { IErrorResult, IJglForm, IValidator } from "./form-validator.definitions";
-
+import { IErrorResult, IValidator } from "./form-validator.definitions";
 // #endregion
 
 
@@ -12,17 +10,9 @@ import { IErrorResult, IJglForm, IValidator } from "./form-validator.definitions
  * Uses deep equality comparison for change detection, which properly handles
  * functions, dates, undefined values, and circular references.
  */
-export class JGLForm<T> {
-    // Store the initial state of the form data
-    initial: T;
-
+export class JGLFormValidator<T> {
     private validators: Array<IValidator<T>> = [];
 
-    constructor(data:T){
-        // Store a deep copy of the initial data state
-        // This preserves dates, undefined values, and handles circular references
-        this.initial = deepClone(data);
-    }
 
     /**
      * Add a validator to the form
@@ -42,7 +32,7 @@ export class JGLForm<T> {
         validatorFn: (data: T) => boolean,
         errorCode: string,
         field: keyof T,
-        args: Array<string> | undefined = undefined): void {
+        args: Array<string> | undefined = undefined) : void {
 
         if (this.validators.find(x => x.errorCode === errorCode && x.field === field)) {
             throw new Error(`Validator with error code ${errorCode} already exists`);
@@ -52,19 +42,20 @@ export class JGLForm<T> {
         this.validators = [...this.validators, validator];
     }
 
-    /**
-     * Get validation errors for a specific field
-     * @param key Field key to get errors for
+
+    /**     * Check if a specific field has errors
+     * @param displayErros Whether to consider displaying errors
+     * @param key Field key to check for errors
      * @param data Current form data
-     * @returns Array of validator definitions representing the errors
-     * @example
-     * const errors = form.getErrors('email', formData);
+     * @returns True if the field has errors and displayErros is true, otherwise false
      */
-    getErrorsByField(key: keyof T, data: T): Array<IErrorResult<T>> {
-        return this.validators
-            .filter(v => v.field === key && !v.isValidFn(data))
-            .map(v => ({ fieldName: key, errorCode: v.errorCode, args: v.args }) as IErrorResult<T>);
+    hasFieldErrors(displayErros:boolean, key: keyof T, data:T): boolean {
+        if(displayErros){
+            return this.validators.some(v => v.field === key && !v.isValidFn(data));
+        }
+        return false;
     }
+
 
     /**
      * Get validation errors for all fields.
@@ -78,38 +69,5 @@ export class JGLForm<T> {
             .filter(v => !v.isValidFn(data))
             .map(v => ({ fieldName: v.field, errorCode: v.errorCode, args: v.args }) as IErrorResult<T>)
     }
-
-    /**
-     * Evaluate and set the form data, returning its validity and change status
-     * @param data data to evaluate
-     * @returns IJglForm<T> object with validity and change status
-     * @example
-     * const formState = form.setFormData(formData);
-     */
-    setFormData(data: T): IJglForm<T> {
-        const errors = this.getErrors(data);
-        const hasChanges = this.setHasChanges(data);
-
-        return { 
-            isValid: errors.length === 0,
-            hasChanges,
-            data : deepClone(data)
-        };
-    }
-
-    /**
-     * Update initial data state
-     * @param data initial data to set
-     * @example
-     * form.updateInitialData(formData);
-     */
-    updateInitialData(data:T): void {
-        this.initial = deepClone(data);
-    }
-
-    private setHasChanges(data:T): boolean {
-        // Use deep equality comparison to detect changes
-        // This properly handles dates, functions, undefined values, and circular references
-        return !deepEqual(data, this.initial);
-    }
+    
 }
