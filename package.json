@@ -19,7 +19,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^7.9.6",
+    "react-router-dom": "^7.10.1",
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
