@@ -1,4 +1,5 @@
 import { eErrorType } from "../types/error-type";
+import { CollectionItem } from "./collection-item.model";
 
 export interface JglErrorResponse
 {
@@ -6,6 +7,6 @@ export interface JglErrorResponse
     title : string;
     description : string;
     domain : string;
-    errorMessages? :  Record<string,string>;
+    errorMessages? :  CollectionItem[];
     errorType:eErrorType
 }
