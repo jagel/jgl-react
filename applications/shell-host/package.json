@@ -1,0 +1,36 @@
+{
+  "name": "shell-host",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Micro Frontend Shell Host Application",
+  "scripts": {
+    "dev": "vite --port 3000",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
+    "@mui/material": "^7.3.6",
+    "@reduxjs/toolkit": "^2.11.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-error-boundary": "^6.1.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.11.0",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@originjs/vite-plugin-federation": "^1.3.6",
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@types/react-redux": "^7.1.34",
+    "@vitejs/plugin-react-swc": "^4.1.0",
+    "concurrently": "^9.2.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1"
+  }
+}

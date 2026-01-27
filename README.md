@@ -1,84 +1,138 @@
-# React + TypeScript + Vite
+# JGL Micro Frontend Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern micro frontend architecture built with React, TypeScript, and Module Federation (Vite). This platform enables independent development, deployment, and scaling of frontend applications while maintaining a cohesive user experience.
 
-Currently, two official plugins are available:
+## 🏗️ Architecture Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### **Horizontal Microservices Approach**
+- Each micro frontend owns complete user journeys (entire pages/workflows)
+- Shell host handles authentication, routing, and shared layout
+- Independent deployment and development cycles
+- Framework-agnostic shared libraries
 
-## React Compiler
+### **Project Structure**
+```
+jgl-react/
+├── 📁 applications/                # Micro Frontend Applications
+│   ├── shell-host/                # Main host application (React)
+│   ├── react-demo-mfe/           # React components demo
+│   └── angular-demo-mfe/          # Angular components demo (future)
+│
+├── 📁 workspaces/                 # Shared Libraries
+│   ├── react-shared/             # React-specific libraries
+│   │   ├── jgl-mui/              # MUI component library
+│   │   └── jgl-react-lib/        # React utilities & hooks
+│   ├── angular-shared/           # Angular-specific libraries
+│   └── agnostic-shared/          # Framework-agnostic libraries
+│       └── jgl-ui-lib/           # Generic UI utilities
+│
+├── 📁 external-mfes/             # External repository MFEs (git-ignored)
+├── 📁 scripts/                   # Development automation scripts  
+└── 📁 docs/                      # Documentation & change tracking
+```
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## 🚀 Quick Start
 
-## Expanding the ESLint configuration
+### **Prerequisites**
+- Node.js 18+ 
+- npm 8+
+- PowerShell (Windows)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### **Setup & Development**
+```powershell
+# Clone and setup
+git clone <repository-url>
+cd jgl-react
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# Install all dependencies
+.\scripts\setup.ps1 -Install
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Start all micro frontends
+.\scripts\setup.ps1 -Dev
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
+# OR start specific applications
+.\scripts\setup.ps1 -ShellOnly      # Shell host only (port 3000)
+.\scripts\setup.ps1 -ReactDemoOnly  # React demo only (port 3001)
+```
+
+### **Access Points**
+- **Shell Host**: http://localhost:3000
+- **React Demo MFE**: http://localhost:3001 (standalone)
+
+## 🛠️ Development Workflow
+
+### **Available Commands**
+```bash
+# Root level commands
+npm run dev:all           # Start all MFEs
+npm run dev:shell         # Start shell host only  
+npm run dev:react-demo    # Start React demo MFE only
+npm run build:all         # Build all applications
+npm run install:all       # Install all dependencies
+
+# PowerShell automation
+.\scripts\setup.ps1 -Help # Show all available options
+```
+
+### **Adding New Micro Frontends**
+1. Create new application in `applications/` directory
+2. Configure Module Federation in `vite.config.ts`
+3. Update shell host to load the new MFE
+4. Add scripts to root `package.json`
+
+## 📡 Module Federation Configuration
+
+### **Shell Host Configuration**
+```typescript
+// applications/shell-host/vite.config.ts
+federation({
+  name: 'shell-host',
+  remotes: {
+    'react-demo-mfe': {
+      external: 'http://localhost:3001/remoteEntry.js',
+      format: 'esm',
+      from: 'vite'
+    }
   },
-])
+  shared: {
+    react: { singleton: true },
+    'react-dom': { singleton: true },
+    '@mui/material': {}
+  }
+})
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🔐 Authentication Architecture
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### **Host-Managed Authentication**
+- Shell host handles SSO authentication process
+- JWT tokens managed centrally
+- Tokens passed to MFEs that require authentication
+- Demo MFEs operate without authentication
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🌍 Deployment Strategy
 
+### **Environment-Based MFE Loading**
+Different MFEs can be loaded per environment:
+- **Development**: All MFEs including demos
+- **Staging**: All MFEs for testing
+- **Production**: Business MFEs only (no demos)
 
-# MUI
+### **Independent Deployment**
+- Each MFE can be deployed separately
+- Shell host dynamically loads available MFEs
+- Graceful fallback for unavailable MFEs
 
-Revision: 10/27/2025
+## 📋 Change Log
 
-Packages required
+See [CHANGELOG.md](docs/CHANGELOG.md) for detailed change tracking.
 
-``` bash 
-npm install @mui/material @emotion/react @emotion/styled
-```
+## 📚 Additional Documentation
+
+- [Architecture Details](docs/architecture.md)
+- [Development Guide](docs/development-guide.md)  
+- [Deployment Guide](docs/deployment-guide.md)
+
+---
+
+**Built with ❤️ using AI-assisted development**

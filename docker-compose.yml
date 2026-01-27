@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   jgl-react:
     build: .
@@ -7,11 +5,13 @@ services:
       - "3000:3000"
     volumes:
       # Bind mount source code for development
-      - ./src:/app/src
-      - ./public:/app/public
+      - ./applications:/app/applications
       - ./workspaces:/app/workspaces
-      - ./index.html:/app/index.html
-      - ./vite.config.ts:/app/vite.config.ts
+      - ./public:/app/public
+      - ./scripts:/app/scripts
+      - ./docs:/app/docs
+      - ./external-mfes:/app/external-mfes
+      - ./package.json:/app/package.json
       - ./tsconfig.json:/app/tsconfig.json
       - ./tsconfig.app.json:/app/tsconfig.app.json
       - ./tsconfig.node.json:/app/tsconfig.node.json

@@ -10,6 +10,10 @@ dist-ssr
 *.tgz
 *.tar.gz
 
+# Micro Frontend External Repositories (Future Implementation)
+external-mfes/
+*.mfe-temp
+
 # Runtime data
 pids
 *.pid
