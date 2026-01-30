@@ -12,7 +12,13 @@ export default defineConfig({
       exposes: {
       './ReactDemoApp': './src/ReactDemoApp.tsx'
       },
-      shared: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled']
+      shared: [
+        'react',
+        'react-dom',
+        '@mui/material',
+        '@emotion/react',
+        '@emotion/styled'
+      ]
     })
   ],
   server: {
@@ -24,11 +30,15 @@ export default defineConfig({
   },
   resolve:{
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@app': path.resolve(__dirname, './src'),
       '@jgl-mui': path.resolve(__dirname, '../../workspaces/react-shared/jgl-mui/src'),
       '@jgl-ui-lib': path.resolve(__dirname, '../../workspaces/agnostic-shared/jgl-ui-lib/src'),
       '@jgl-react-lib': path.resolve(__dirname, '../../workspaces/react-shared/jgl-react-lib/src')
     }
+  },
+  optimizeDeps: {
+    // Force Vite to not pre-bundle these packages to avoid conflicts
+    exclude: ['@jgl-mui']
   },
   publicDir: 'dist',
   build: {

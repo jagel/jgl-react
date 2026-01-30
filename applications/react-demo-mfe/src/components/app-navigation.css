@@ -1,0 +1,36 @@
+.app-navigation {
+    width: 240px;
+}
+
+.MuiPaper-root nav{
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    
+}
+
+.app-navigation .MuiDrawer-paper {
+    width: 240px;
+    box-sizing: border-box;
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 4px;
+    min-height: 64px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.navigation-item {
+    padding: 12px 16px;
+}
+
+.navigation-item:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.navigation-item .MuiListItemIcon-root {
+    min-width: 40px;
+}
