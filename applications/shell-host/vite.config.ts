@@ -18,13 +18,6 @@ export default defineConfig({
         }
       },
       shared: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled']
-      // shared: {
-      //   react: { singleton: true },
-      //   'react-dom': { singleton: true },
-      //   '@mui/material': {},
-      //   '@emotion/react': { singleton: true },
-      //   '@emotion/styled': { singleton: true }
-      // }
     })
   ],
   // Configure the development server to listen on all network interfaces. Docker requires this to access the server from outside the container.
