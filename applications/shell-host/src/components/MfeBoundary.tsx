@@ -38,7 +38,7 @@ const MfeBoundary: React.FC<MfeBoundaryProps> = ({ children, mfeName }) => {
   return (
     <ErrorBoundary
       FallbackComponent={({ error, resetErrorBoundary }) => (
-        <ErrorFallback error={error} resetErrorBoundary={resetErrorBoundary} mfeName={mfeName} />
+        <ErrorFallback error={error as Error} resetErrorBoundary={resetErrorBoundary} mfeName={mfeName} />
       )}
       onError={(error, errorInfo) => {
         console.error(`Error in ${mfeName} MFE:`, error, errorInfo);

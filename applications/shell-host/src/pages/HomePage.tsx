@@ -24,7 +24,7 @@ const HomePage: React.FC = () => {
       </Typography>
 
       <Grid container spacing={3} sx={{ mt: 4 }}>
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12,md:6 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -51,7 +51,7 @@ const HomePage: React.FC = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12,md:6 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
