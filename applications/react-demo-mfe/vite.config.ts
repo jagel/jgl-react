@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import federation from '@originjs/vite-plugin-federation'
+import path from 'path'
 
 export default defineConfig({
   plugins: [
@@ -17,14 +18,25 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 3001,
-    cors: true,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-    },
+    watch:{
+      usePolling: true
+    }
+    //cors: true,
+    // headers: {
+    //   'Access-Control-Allow-Origin': '*',
+    //   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+    //   "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    // },
     // Serve built files alongside dev server
-    middlewareMode: false
+   // middlewareMode: false
+  },
+  resolve:{
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@jgl-mui': path.resolve(__dirname, '../../workspaces/react-shared/jgl-mui/src'),
+      '@jgl-ui-lib': path.resolve(__dirname, '../../workspaces/agnostic-shared/jgl-ui-lib/src'),
+      '@jgl-react-lib': path.resolve(__dirname, '../../workspaces/react-shared/jgl-react-lib/src')
+    }
   },
   publicDir: 'dist',
   build: {

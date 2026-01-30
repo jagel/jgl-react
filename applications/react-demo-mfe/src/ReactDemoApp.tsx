@@ -7,9 +7,14 @@ import DemoLayout from './components/DemoLayout';
 import ButtonsShowcase from './buttons/buttons-showcase';
 import { createBrowserRouter, RouteObject, Outlet, RouterProvider } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import { MenuList, ListItem } from '@mui/material';
+import { MenuListItem } from '@jgl-mui/components';
 
 const TestComponent1 = () => {
-  return <div>Test Component 1</div>;
+  // return <label></label>
+  return <MenuList>
+    <ListItem>Test Component 1 - Item 1</ListItem>
+  </MenuList>;
 };
 
 const TestComponent2 = () => {
