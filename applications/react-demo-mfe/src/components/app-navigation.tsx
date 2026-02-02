@@ -18,7 +18,8 @@ import { mdiChevronLeft, mdiChevronRight, mdiLock, mdiLockOpen } from '@mdi/js';
 import MenuListItem from '@jgl-mui/components/menu-list-item';
 
 // Internal imports
-import { AppRoutes, authRoutes } from '@app/app-setup/app-routing';
+import { APP_ROUTES } from '@app/app-setup/app-routing';
+import { AppRoutes } from '@app/models/app-setup.model';
 
 // Styles
 import './app-navigation.css';
@@ -26,6 +27,7 @@ import './app-navigation.css';
 
 // #region Interfaces
 interface AppNavigationProps {
+    //basePath:string;
     open: boolean;
     onClose: () => void;
 }
@@ -38,7 +40,7 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({ open, onClose }) =
     const navigate = useNavigate();
     const location = useLocation();
 
-    const menuItems = useMemo((): AppRoutes[] => (Object.values(authRoutes) ), []);
+    const menuItems = useMemo((): AppRoutes[] => (Object.values(APP_ROUTES) ), []);
     const [lockDrawer, setLockDrawer] = useState(false);
 
     // #endregion Initializations
@@ -67,8 +69,7 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({ open, onClose }) =
             className="app-navigation"
         >
             <List component={"nav"}>
-                {menuItems.map((item, index) => <MenuListItem key={index}>{item.name}</MenuListItem>) }
-                {/* {menuItems.map((item, index) => <MenuListItem
+                {menuItems.map((item, index) => <MenuListItem
                     key={index}
                     onClick={() => handleNavigate(item.path)}
                     className={'navigation-item-' + index}
@@ -78,10 +79,10 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({ open, onClose }) =
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     <ListItemText primary={item.name} />
                 </MenuListItem>
-                )} */}
+                )}
             </List>
 
-            {/*<div className="drawer-header">
+            <div className="drawer-header">
                  <IconButton color='secondary' onClick={() => setLockDrawer(prev => !prev)}>
                     { <Icon path={lockDrawer ? mdiLock : mdiLockOpen} size={1} /> } 
                 </IconButton>
@@ -89,7 +90,7 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({ open, onClose }) =
                 <IconButton disabled={lockDrawer} color='primary' onClick={(onCloseBtnClick)}>
                     { <Icon path={ theme.direction === 'ltr' ? mdiChevronLeft : mdiChevronRight} size={1} /> }
                 </IconButton>
-            </div> */}
+            </div>
         </Drawer>
     );
     // #endregion Render

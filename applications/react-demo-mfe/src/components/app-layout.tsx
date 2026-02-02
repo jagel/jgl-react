@@ -20,14 +20,15 @@ import AppNavigation from "./app-navigation";
 const AppLayout: React.FC = () => {
     // #region Initializations
     const [drawerOpen, setDrawerOpen] = useState(false);
-    // #endregion Initializations
+    
     const sxPaddingAdjustment = {
         paddingLeft: drawerOpen ? '250px' : '10px',
         paddingRight: '10px',
         transition: 'padding-left 0.2s'
     };
-    return <>
-    <Box>
+    // #endregion Initializations
+
+    return <Box>
         <AppBar position="sticky" sx={sxPaddingAdjustment}>
             <Toolbar>
                 <Button color="inherit" onClick={() => setDrawerOpen(prev => !prev)}>
@@ -36,7 +37,7 @@ const AppLayout: React.FC = () => {
             </Toolbar>
         </AppBar>
         <Box sx={{paddingTop: '16px'}}>
-            {/* <AppNavigation open={drawerOpen} onClose={() => setDrawerOpen(false)} /> */}
+            <AppNavigation open={drawerOpen} onClose={() => setDrawerOpen(false)} />
                 
             <Box sx={sxPaddingAdjustment}>
                 <React.Suspense fallback={<div>Loading...</div>}>
@@ -44,8 +45,7 @@ const AppLayout: React.FC = () => {
                 </React.Suspense>
             </Box>
         </Box>
-    </Box>
-    </>
+    </Box>;
 }
 
 export default AppLayout;

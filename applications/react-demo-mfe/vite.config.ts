@@ -10,7 +10,7 @@ export default defineConfig({
       name: 'react-demo-mfe',
       filename: 'remoteEntry.js',
       exposes: {
-      './ReactDemoApp': './src/ReactDemoApp.tsx'
+        './ReactDemoApp': './src/ReactDemoApp.tsx'
       },
       shared: [
         'react',
@@ -24,11 +24,11 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 3001,
-    watch:{
+    watch: {
       usePolling: true
     }
   },
-  resolve:{
+  resolve: {
     alias: {
       '@app': path.resolve(__dirname, './src'),
       '@jgl-mui': path.resolve(__dirname, '../../workspaces/react-shared/jgl-mui/src'),

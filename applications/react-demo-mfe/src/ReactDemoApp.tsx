@@ -1,41 +1,27 @@
 // #region Imports
 // React and external libraries
-import React, { useMemo } from 'react';
+import React, { lazy, useMemo } from 'react';
+import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 
 // MUI Components and Icons
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Paper from '@mui/material/Paper';
+import { theme } from './styles/theme';
 
 // Internal imports
-import { theme } from './styles/theme';
-import ButtonsShowcase from './buttons/buttons-showcase';
-import { createBrowserRouter, RouteObject, Outlet, RouterProvider } from 'react-router-dom';
-import Box from '@mui/material/Box';
-
-import { MenuListItem } from '@jgl-mui/components';
-
 import AppErrorPage from '@app/pages/app-error.page';
 import AppLayout from '@app/components/app-layout';
-import { MenuList } from '@mui/material';
-// import MenuListItem from '../../../workspaces/react-shared/jgl-mui/src/components/menu-list-item';
-// import { MenuListItem } from '@jgl-mui/components';
-// import AppErrorPage from './pages/app-error.page';
+import { APP_ROUTES } from '@app/app-setup/app-routing';
 // #endregion Imports
 
-import ListItem from '@mui/material/ListItem';
+// Pages
+// const AppHome = lazy(() => import("@app/pages/app-home.page"));
+// const TableExample = lazy(() => import("@app/pages/table-example.page"));
 
-const TestComponent1 = () => {
-    return <label>Hi</label>
-    // return <MenuList>
-    //   <MenuListItem>Test Component 1 - Item 1</MenuListItem>
-    // </MenuList>
-
-};
-
-const TestComponent2 = ({ text }: { text: string }) => {
-    return <div>Test Component 2 {text}</div>;
-};
+import AppHome from '@app/pages/app-home.page'
+import TableExample from '@app/pages/table-example.page'
+import ButtonsShowcase from '@app/pages/buttons-showcase.page'
+// const ButtonsShowcase = lazy(() => import("@app/pages/buttons-showcase.page")); TODO: Fix lazy loading with MFE
 
 interface AppLayoutProps {
     basePath: string;
@@ -45,7 +31,7 @@ const ReactDemoApp: React.FC<AppLayoutProps> =
 // Default basePath to 'react-demo/' for MFE usage
 ({ basePath }: AppLayoutProps = { basePath: '/react-demo' }) => { 
     const isAuthenticated = true;
-
+    
     const routes = useMemo((): RouteObject[] => (
         !isAuthenticated ?
             // Unauthenticated routes
@@ -60,18 +46,14 @@ const ReactDemoApp: React.FC<AppLayoutProps> =
 
                 children: [{
                     index: true,
-                    element: <TestComponent1 />
-                }, {
-                    path: 'test2',
-                    element: <TestComponent2 text={'test2'} />
+                    element: <AppHome />
+                },{
+                    path: APP_ROUTES.tablePage.path,
+                    element: <TableExample />
+                },{
+                    path: APP_ROUTES.buttonsShowcase.path,
+                    element: <ButtonsShowcase />
                 }
-                    // ,{
-                    //   path: `${basePath}/test2`,
-                    //   element: <TestComponent2 />
-                    // },{
-                    //   path: `test2`,
-                    //   element: <TestComponent2 />
-                    // }
                 ]
             }])
         , [isAuthenticated]); // Recompute routes only when authentication status changes
